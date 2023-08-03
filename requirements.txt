@@ -63,7 +63,6 @@ locket==0.2.1
 markdown-it-py==3.0.0
 mccabe==0.6.1
 mdurl==0.1.2
-mkl-service==2.4.0
 mpmath==1.2.1
 msal==1.17.0
 msal-extensions==0.3.1
