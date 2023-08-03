@@ -1,0 +1,5 @@
+streamlit==1.25.0
+common==0.1.2
+asyncio==3.4.3
+aiohttp==3.8.5
+streamlit_javascript==0.1.5
