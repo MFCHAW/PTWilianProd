@@ -9,10 +9,10 @@ st.set_page_config(
     layout='wide'
 )
 
-set_page_container_style(
-    max_width=1100, max_width_100_percent=True,
-    padding_top=0, padding_right=10, padding_left=5, padding_bottom=10
-)
+# set_page_container_style(
+#     max_width=1100, max_width_100_percent=True,
+#     padding_top=0, padding_right=10, padding_left=5, padding_bottom=10
+# )
 
 
 st.sidebar.title('FFB Procurement')
