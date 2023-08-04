@@ -1,5 +1,6 @@
 import streamlit as st
 from common import set_page_container_style
+from streamlit_extras.app_logo import add_logo
 
 
 # --- Define page configuration ---
@@ -9,6 +10,38 @@ st.set_page_config(
     initial_sidebar_state='collapsed',
     layout='wide'
 )
+
+
+# add_logo("https://wilianperkasa.com/public/assets/img/WPG_logo_complete3_rev.png")
+
+def add_logo():
+    st.markdown(
+        """
+        <style>
+            [data-testid="stSidebarNav"] {
+                background-image: url(.png);
+                background-repeat: no-repeat;
+                padding-top: 120px;
+                background-position: 20px 20px;
+                max-width:50%;
+                height:auto;
+            }
+            [data-testid="stSidebarNav"]::before {
+                content: "My Company Name";
+                margin-left: 20px;
+                margin-top: 20px;
+                font-size: 30px;
+                position: relative;
+                top: 100px;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+add_logo()
+
 
 st.sidebar.title('FFB Procurement')
 
