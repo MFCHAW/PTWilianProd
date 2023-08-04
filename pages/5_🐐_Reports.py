@@ -4,13 +4,25 @@ import streamlit.components.v1 as components
 # st.title('Reports')
 
 # --- Hide the Streamlit Menu Button and Trade Marks ---
-hide_menu = """
+applyStyle = """
 <style>
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
+
+*, ::before, ::after {
+    box-sizing: content-box; /* Set back to default value */
+}
+
+.block-container {
+                    padding-top: 0.5rem;
+                    padding-bottom: 0rem;
+                    padding-left: 0rem;
+                    padding-right: 0rem;
+                }
 </style>
 """
-st.markdown(hide_menu, unsafe_allow_html=True)
+st.markdown(applyStyle, unsafe_allow_html=True)
+
 
 reportList = ['Daily FFB Proceeds', 'FFB Proceeds Summary',
               'FFB Proceeds Detail', 'FFB Proceeds Statement']
@@ -199,4 +211,4 @@ if comboBoxReport == 'Daily FFB Proceeds':
         </script>
     </body>
     </html>
-    """, width=None, height=800, scrolling=True)
+    """, width=None, height=900, scrolling=True)
