@@ -169,7 +169,9 @@ if comboBoxReport == 'Daily FFB Proceeds':
                 alert("Error");  
             }  
         });  
-    } 
+    }
+    
+    previewReport()
     '''
 
     components.html(f""" 
@@ -194,9 +196,7 @@ if comboBoxReport == 'Daily FFB Proceeds':
                             <h1>Report Embedded Demo</h1>
                         </div>
                         <div class="col-md-12 mb-5">
-                            <button type="button" class="btn btn-primary" onclick="reloadReport()">Reload Report</button>
-                            <button type="button" class="btn btn-success pull-right" onclick="previewReport()">Preview Report</button>
-                            <button type="button" class="btn btn-warning pull-right" onclick="listReport()">Report Lisiting</button>
+                            <button type="button" class="btn btn-primary pull-right" onclick="reloadReport()">Reload Report</button>
                         </div>
                     </form>
                 </div>
