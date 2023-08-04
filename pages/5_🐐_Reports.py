@@ -184,7 +184,8 @@ if comboBoxReport == 'Daily FFB Proceeds':
             <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
             <script type="text/javascript" language="javascript" src="https://rawgit.com/Microsoft/PowerBI-JavaScript/master/dist/powerbi.min.js"></script> </script>
         </head>
-    <body>
+        
+    <body style="background-color: black; color: white;">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
