@@ -12,28 +12,24 @@ st.set_page_config(
 )
 
 
-# add_logo("https://wilianperkasa.com/public/assets/img/WPG_logo_complete3_rev.png")
-
 def add_logo():
     st.markdown(
         """
         <style>
             [data-testid="stSidebarNav"] {
-                background-image: url(.png);
+                background-image: url('https://lmquartobistorage.blob.core.windows.net/pt-wilian-perkasa/PTWP_Logo.png');
                 background-repeat: no-repeat;
-                padding-top: 120px;
+                padding-top: 10px;
                 background-position: 20px 20px;
-                max-width:50%;
-                height:auto;
             }
-            [data-testid="stSidebarNav"]::before {
-                content: "My Company Name";
-                margin-left: 20px;
-                margin-top: 20px;
-                font-size: 30px;
-                position: relative;
-                top: 100px;
-            }
+            # [data-testid="stSidebarNav"]::before {
+            #     content: "FFB Procurement Application";
+            #     margin-left: 10px;
+            #     margin-top: 20px;
+            #     font-size: 19px;
+            #     position: relative;
+            #     top: 100px;
+            # }
         </style>
         """,
         unsafe_allow_html=True,

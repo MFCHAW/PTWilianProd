@@ -6,6 +6,32 @@ from streamlit_javascript import st_javascript
 from streamlit_extras.switch_page_button import switch_page
 
 
+def add_logo():
+    st.markdown(
+        """
+        <style>
+            [data-testid="stSidebarNav"] {
+                background-image: url('https://lmquartobistorage.blob.core.windows.net/pt-wilian-perkasa/PTWP_Logo.png');
+                background-repeat: no-repeat;
+                padding-top: 10px;
+                background-position: 20px 20px;
+            }
+            # [data-testid="stSidebarNav"]::before {
+            #     content: "FFB Procurement Application";
+            #     margin-left: 10px;
+            #     margin-top: 20px;
+            #     font-size: 19px;
+            #     position: relative;
+            #     top: 100px;
+            # }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+add_logo()
+
 st.title('Crop Price Computation')
 
 # --- Hide the Streamlit Menu Button and Trade Marks ---
