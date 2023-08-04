@@ -1,6 +1,7 @@
 import streamlit as st
 from common import set_page_container_style
 
+
 # --- Define page configuration ---
 st.set_page_config(
     page_title='PT Wilian - FFB Procurement',
@@ -10,7 +11,6 @@ st.set_page_config(
 )
 
 st.sidebar.title('FFB Procurement')
-
 
 # Adding additional controls in the sidebar.
 # Using object notation
@@ -31,7 +31,6 @@ with st.sidebar:
 
 # Page Title
 st.title('Dashboard')
-
 
 # --- Hide the Streamlit Menu Button and Trade Marks ---
 hide_menu = """
