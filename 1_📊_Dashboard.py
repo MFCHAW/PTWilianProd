@@ -36,7 +36,7 @@ def add_logo():
     )
 
 
-# add_logo()
+add_logo()
 
 
 st.sidebar.title('FFB Procurement')
