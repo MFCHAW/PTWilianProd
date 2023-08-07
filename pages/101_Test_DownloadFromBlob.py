@@ -14,7 +14,7 @@ if 'message' not in st.session_state:
 if 'download_link' not in st.session_state:
     st.session_state['download_link'] = ''
 
-btn_download_report1 = st.button('Donwload "Financial Profit & Loss Report"')
+btn_download_report1 = st.button('Financial Profit & Loss Report')
 
 container1 = st.container()
 container2 = st.container()
@@ -51,7 +51,7 @@ async def download_financialreport():
             # st.write(data)
 
             if response.status == 200:
-                st.session_state['message'] = 'Report processing done!'
+                st.session_state['message'] = 'Report processing done! Click the link below to start the report download.'
                 container1.write(st.session_state['message'])
                 st.session_state['download_link'] = get_download_url(
                     'FinancialReports')
