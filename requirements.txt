@@ -9,3 +9,4 @@ streamlit_javascript
 common
 streamlit_extras
 azure-storage-blob
+pyodbc

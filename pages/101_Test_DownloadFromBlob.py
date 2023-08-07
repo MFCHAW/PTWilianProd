@@ -4,6 +4,8 @@ import aiohttp
 import json
 from azure.storage.blob import generate_blob_sas, AccountSasPermissions
 from datetime import datetime, timedelta
+import requests
+
 
 rpt1_url = 'https://prod-63.southeastasia.logic.azure.com:443/workflows/05c11e1ceecd43ab8b795898fddc0a0f/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=1kBL1jblszIunn9t3x1ZGPuICAz_NDCCmWjTQkiME7w'
 
@@ -56,6 +58,8 @@ async def download_financialreport():
                 st.session_state['download_link'] = get_download_url(
                     'FinancialReports')
                 container2.write(st.session_state['download_link'])
+                # response = requests.get(st.session_state['download_link'])
+                # open('instangram.ico', 'wb').write(response.content)
             else:
                 st.session_state['message'] = 'Error occured during downloading the report!'
                 container1.write(st.session_state['message'])

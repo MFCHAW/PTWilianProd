@@ -1,5 +1,13 @@
 import streamlit as st
 import streamlit.components.v1 as components
+from streamlit_extras.switch_page_button import switch_page
+
+if 'loggedIn' not in st.session_state:
+    st.session_state['loggedIn'] = False
+
+if st.session_state['loggedIn'] == False:
+    switch_page('Home')
+    st.stop()
 
 # st.title('Reports')
 

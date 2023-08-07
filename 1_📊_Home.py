@@ -1,7 +1,7 @@
 import streamlit as st
+from user import login
 from common import set_page_container_style
 from streamlit_extras.app_logo import add_logo
-
 
 # --- Define page configuration ---
 st.set_page_config(
@@ -38,7 +38,6 @@ def add_logo():
 
 add_logo()
 
-
 st.sidebar.title('FFB Procurement')
 
 # Adding additional controls in the sidebar.
@@ -48,18 +47,12 @@ add_selectbox = st.sidebar.selectbox(
     ('Email', 'Home phone', 'Mobile phone')
 )
 
-# if 'g_message' in st.session_state:
-#     st.text(st.session_state['g_message'])
-
 # Using 'with' notation
 with st.sidebar:
     add_radio = st.radio(
         'Choose a shipping method',
         ('Standard (5-15 days)', 'Express (2-5 days)')
     )
-
-# Page Title
-st.title('Dashboard')
 
 # --- Hide the Streamlit Menu Button and Trade Marks ---
 hide_menu = """
@@ -71,13 +64,57 @@ footer {visibility: hidden;}
 st.markdown(hide_menu, unsafe_allow_html=True)
 
 
-# # Temporary store the input into the memory and share with other pages.abs
-# if 'my_input' not in st.session_state:
-#     st.session_state['my_input'] = ''
+headerSection = st.container()
+mainSection = st.container()
+loginSection = st.container()
+logOutSection = st.container()
 
-# my_input = st.text_input('Input a text here', st.session_state['my_input'])
-# submit = st.button('Submit')
 
-# if submit:
-#     st.session_state['my_input'] = my_input
-#     st.write('You have entered:', my_input)
+def show_main_page():
+    with mainSection:
+        # Page Title
+        st.title('Main Page')
+
+
+def LoggedOut_Clicked():
+    st.session_state['loggedIn'] = False
+
+
+def show_logout_page():
+    loginSection.empty()
+    with logOutSection:
+        st.button('Log Out', key='logout', on_click=LoggedOut_Clicked)
+
+
+def show_login_page():
+    with loginSection:
+        if st.session_state['loggedIn'] == False:
+            userName = st.text_input(
+                label='', value='', placeholder='Enter your user name')
+            password = st.text_input(
+                label='', value='', placeholder='Enter password', type='password')
+            st.button('Login', on_click=LoggedIn_Clicked,
+                      args=(userName, password))
+
+
+def LoggedIn_Clicked(userName, password):
+    if login(userName, password):
+        st.session_state['loggedIn'] = True
+    else:
+        st.session_state['loggedIn'] = False
+        st.error('Invalid user name or password')
+
+
+with headerSection:
+    st.title('FFB Procurement Application')
+
+    # First run will have nothing in session_state
+    if 'loggedIn' not in st.session_state:
+        st.session_state['loggedIn'] = False
+        show_login_page()
+    else:
+        if st.session_state['loggedIn']:
+            show_logout_page()
+            show_main_page()
+        else:
+            show_login_page()
