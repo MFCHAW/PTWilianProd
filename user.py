@@ -16,10 +16,10 @@ def init_connection():
 
 
 def run_query(query, args):
-    try:
-        conn = init_connection()
+    conn = init_connection()
+    cursor = conn.cursor()
 
-        cursor = conn.cursor()
+    try:
         cursor.execute(query, args[0], args[1], args[2])
         return cursor.fetchall()
 
