@@ -7,7 +7,7 @@ from streamlit_extras.app_logo import add_logo
 st.set_page_config(
     page_title='PT Wilian - FFB Procurement',
     page_icon='✍',
-    initial_sidebar_state='collapsed',
+    initial_sidebar_state='auto',   #(collapsed, auto, expanded)
     layout='wide'
 )
 

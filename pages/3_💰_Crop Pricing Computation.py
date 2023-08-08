@@ -53,25 +53,68 @@ st.markdown(hide_menu, unsafe_allow_html=True)
 placeholder = st.empty()
 
 
+if 'pricing_message' not in st.session_state:
+    st.session_state['pricing_message'] = ''
+
+if 'pricing_status' not in st.session_state:
+    st.session_state['pricing_status'] = ''
+
+
 url = 'https://prod-37.southeastasia.logic.azure.com:443/workflows/8d3ee9a9b3bc46868eca0b23032e7c13/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=9TAwgb1TlIaN5SBi40BSN6S87LDXZSxY5Iniz1N-ND8'
 
 
-async def processPricing(ou, year, month):
-    async with aiohttp.ClientSession() as session:
+def get_OUKey(ou):
+    if ou == 'LIBO SAWIT PERKASA PALM OIL MILL':
+        return 6
+    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 1':
+        return 8
+    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 2':
+        return 9
+
+
+def get_PriceExcelName(ou):
+    if ou == 'LIBO SAWIT PERKASA PALM OIL MILL':
+        return 'LIBO_FFB Daily Pricing.xlsx'
+    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 1':
+        return 'SSP1_FFB Daily Pricing.xlsx'
+    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 2':
+        return 'SSP2_FFB Daily Pricing.xlsx'
+
+
+def get_BatchSuppSheetName(batch):
+    return 'Batch' + str(batch)
+
+
+def get_BatchExcelName(ou):
+    if ou == 'LIBO SAWIT PERKASA PALM OIL MILL':
+        return 'LIBO_FFB Payment.xlsx'
+    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 1':
+        return 'SSP1_FFB Payment.xlsx'
+    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 2':
+        return 'SSP2_FFB Payment.xlsx'
+
+
+async def processPricing(ou, batch):
+    session_timeout = aiohttp.ClientTimeout(total=60 * 60 * 24)
+    async with aiohttp.ClientSession(timeout=session_timeout) as session:
         async with session.post(url, data=json.dumps({
-            "OU": ou,
-            "Year": year,
-            "Month": month
+            "OUKey": get_OUKey(ou),
+            "Batch": batch,
+            "BatchSuppSheetName": get_BatchSuppSheetName(batch),
+            "PriceExcelName": get_PriceExcelName(ou),
+            "BatchExcelName": get_BatchExcelName(ou)
         }, sort_keys=True), headers={'content-type': 'application/json'}) as response:
             data = await response.json()
-            st.write(data)
+            print(data)
 
-            if response.status == 200:
-                st.session_state['g_message'] = 'Pricing computation done!'
-                statusMsg.text(st.session_state['g_message'])
+            if response.status == 200 and data['Status'] == 'Succeeded':
+                st.session_state['pricing_status'] = 'Succeeded'
+                st.session_state['pricing_message'] = 'Pricing computation done!'
+                statusMsg.success(st.session_state['pricing_message'])
             else:
-                st.session_state['g_message'] = 'Error occured during pricing computation!'
-                statusMsg.text(st.session_state['g_message'])
+                st.session_state['pricing_status'] = 'Failed'
+                st.session_state['pricing_message'] = 'Error occured during pricing computation!'
+                statusMsg.error(st.session_state['pricing_message'])
 
 with placeholder.container():
     with st.form(key='cropPrice'):
@@ -82,27 +125,7 @@ with placeholder.container():
                 'SEMUNAI SAWIT PERKASA PALM OIL MILL 2')
         )
 
-        year = st.selectbox(
-            'Year: ',
-            ('2023', '2024')
-        )
-
-        month = st.selectbox(
-            'Month: ',
-            ('January',
-                'February',
-                'March',
-                'April',
-                'May',
-                'June',
-                'July',
-                'August',
-                'September',
-                'October',
-                'November',
-                'December'),
-            8
-        )
+        batch = st.number_input('Batch: ', 1)
 
         st.markdown('#')
 
@@ -116,11 +139,17 @@ with placeholder.container():
 
 statusMsg = st.empty()
 
+if st.session_state['pricing_status'] == 'Succeeded':
+    statusMsg.success(st.session_state['pricing_message'])
+elif st.session_state['pricing_status'] == 'Failed':
+    statusMsg.error(st.session_state['pricing_message'])
+
+
 if computePrice:
     placeholder.empty()
-    st.session_state['g_message'] = 'Processing...'
-    statusMsg.text(st.session_state['g_message'])
+    st.session_state['pricing_message'] = 'Processing...'
+    statusMsg.info(st.session_state['pricing_message'])
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(processPricing(ou, year, month))
+    loop.run_until_complete(processPricing(ou, batch))
