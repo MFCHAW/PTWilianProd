@@ -10,3 +10,4 @@ common
 streamlit_extras
 azure-storage-blob
 pyodbc
+altair==4.2.2
