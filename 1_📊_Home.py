@@ -111,7 +111,6 @@ def LoggedIn_Clicked(userName, password):
     # -- Call the login function inside user.py --
     if login(userName, password):
         st.session_state['loggedIn'] = True
-        getUserKey()
     else:
         st.session_state['loggedIn'] = False
         st.error('Invalid user name or password')
