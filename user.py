@@ -39,7 +39,6 @@ def getUserKey(userName, password):
         for row in cursor.fetchall():
             array1.append(dict(zip(columns, row)))
 
-        print(array1[0]['UserKey'])
         result = str(array1[0]['UserKey'])
         
     except pyodbc.Error as e:
