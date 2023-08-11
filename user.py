@@ -25,7 +25,7 @@ def run_query(query, args):
 
 
 def getUserKey(userName, password):
-    result = ''
+    result = -1
     conn = qconnection()
     cursor = conn.cursor()
     
@@ -39,7 +39,7 @@ def getUserKey(userName, password):
         for row in cursor.fetchall():
             array1.append(dict(zip(columns, row)))
 
-        result = str(array1[0]['UserKey'])
+        result = array1[0]['UserKey']
         
     except pyodbc.Error as e:
         st.write(f'Error executing query: {e}')

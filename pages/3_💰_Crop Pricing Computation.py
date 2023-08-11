@@ -136,7 +136,8 @@ async def processPricing(ou, batch):
             try:
                 cursor.execute(f"""Select OUKey, FPSBatchCode, ErrorMsg as [Error Message] 
                                    from FPS_YYT_BatchErrorList 
-                                   Where ProcessType in ('EXCEL', 'PROFORMA')""")
+                                   Where OUKey = {get_OUKey(ou)} and FPSBatchCode = '{batch}' and 
+                                         ProcessType in ('EXCEL', 'PROFORMA')""")
                 
                 result = []
                 columns = [column[0] for column in cursor.description]
