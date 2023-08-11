@@ -9,6 +9,8 @@ FPS_YYT_BatchSuppList
 
 
 Select * from GMS_YYT_FPSBatchStp
+Select * from FPS_YYT_BatchErrorList
+
 Select * from FPS_MthEndClose
 Select * from FPS_Proforma
 Select * from FPS_ProformaYOP
