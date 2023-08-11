@@ -11,7 +11,7 @@ st.set_page_config(
     layout='wide'
 )
 
-
+# --- Display Client Logo ---
 def add_logo():
     st.markdown(
         """
@@ -35,10 +35,12 @@ def add_logo():
         unsafe_allow_html=True,
     )
 
-
 add_logo()
 
+# --- Form title ---
 st.sidebar.title('FFB Procurement')
+
+
 
 # Adding additional controls in the sidebar.
 # Using object notation
@@ -54,6 +56,8 @@ with st.sidebar:
         ('Standard (5-15 days)', 'Express (2-5 days)')
     )
 
+
+
 # --- Hide the Streamlit Menu Button and Trade Marks ---
 hide_menu = """
 <style>
@@ -64,12 +68,14 @@ footer {visibility: hidden;}
 st.markdown(hide_menu, unsafe_allow_html=True)
 
 
+# -- Declare containers --
 headerSection = st.container()
 mainSection = st.container()
 loginSection = st.container()
 logOutSection = st.container()
 
 
+# -- The content of each container --
 def show_main_page():
     with mainSection:
         # Page Title
@@ -90,16 +96,22 @@ def show_login_page():
     with loginSection:
         if st.session_state['loggedIn'] == False:
             userName = st.text_input(
-                label='', value='', placeholder='Enter your user name')
+                label='User ID', value='fpsadmin', placeholder='Enter your user name')
             password = st.text_input(
-                label='', value='', placeholder='Enter password', type='password')
+                label='Password', value='fpspass', placeholder='Enter password', type='password')
             st.button('Login', on_click=LoggedIn_Clicked,
                       args=(userName, password))
 
 
+
+
+
+# -- If the 'Login' button being clicked, trigger to find the user in database --
 def LoggedIn_Clicked(userName, password):
+    # -- Call the login function inside user.py --
     if login(userName, password):
         st.session_state['loggedIn'] = True
+        getUserKey()
     else:
         st.session_state['loggedIn'] = False
         st.error('Invalid user name or password')
