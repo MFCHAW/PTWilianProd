@@ -25,21 +25,21 @@ def run_query(query, args):
 
 
 def getUserKey(userName, password):
+    result = ''
     conn = qconnection()
     cursor = conn.cursor()
     
     try:
         cursor.execute(f"""Select UserKey 
                             from FPS_Users 
-                            Where UserId = {userName} and Password = {password} """)
+                            Where UserId = '{userName}' and Password = '{password}' """)
         
-        result = ''
         array1 = []
         columns = [column[0] for column in cursor.description]
         for row in cursor.fetchall():
             array1.append(dict(zip(columns, row)))
 
-        return result.join(array1)
+        result = array1[0]['UserKey']
         
     except pyodbc.Error as e:
         st.write(f'Error executing query: {e}')
@@ -48,6 +48,8 @@ def getUserKey(userName, password):
             cursor.close()
         if conn:
             conn.close()
+    
+    return result
     
 
 def login(userName: str, password: str) -> bool:
