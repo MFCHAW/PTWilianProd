@@ -38,26 +38,6 @@ def add_logo():
 add_logo()
 
 
-# # --- Hide the Streamlit Menu Button and Trade Marks ---
-# applyStyle = """
-# <style>
-# #MainMenu {visibility: hidden;}
-# footer {visibility: hidden;}
-
-# *, ::before, ::after {
-#     box-sizing: content-box; /* Set back to default value */
-# }
-
-# .block-container {
-#                     padding-top: 0.5rem;
-#                     padding-bottom: 0rem;
-#                     padding-left: 0rem;
-#                     padding-right: 0rem;
-#                 }
-# </style>
-# """
-# st.markdown(applyStyle, unsafe_allow_html=True)
-
 # --- Hide the Streamlit Menu Button and Trade Marks ---
 hide_menu = """
 <style>

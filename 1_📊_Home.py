@@ -37,24 +37,24 @@ def add_logo():
 
 add_logo()
 
-# --- Form title ---
-st.sidebar.title('FFB Procurement')
+# # --- Form title ---
+# st.sidebar.title('FFB Procurement')
 
 
 
-# Adding additional controls in the sidebar.
-# Using object notation
-add_selectbox = st.sidebar.selectbox(
-    'How would you like to contacted?',
-    ('Email', 'Home phone', 'Mobile phone')
-)
+# # Adding additional controls in the sidebar.
+# # Using object notation
+# add_selectbox = st.sidebar.selectbox(
+#     'How would you like to contacted?',
+#     ('Email', 'Home phone', 'Mobile phone')
+# )
 
-# Using 'with' notation
-with st.sidebar:
-    add_radio = st.radio(
-        'Choose a shipping method',
-        ('Standard (5-15 days)', 'Express (2-5 days)')
-    )
+# # Using 'with' notation
+# with st.sidebar:
+#     add_radio = st.radio(
+#         'Choose a shipping method',
+#         ('Standard (5-15 days)', 'Express (2-5 days)')
+#     )
 
 
 
