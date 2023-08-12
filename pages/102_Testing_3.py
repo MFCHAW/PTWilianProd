@@ -8,19 +8,22 @@ from streamlit_extras.switch_page_button import switch_page
 from init_connection import qconnection
 import pandas as pd
 from st_aggrid import AgGrid, GridOptionsBuilder
-import time
 
 # -- Variables and Session States Initialization --
-if 'pricing_status' not in st.session_state:
-    st.session_state['pricing_status'] = ''
-    
 if 'pricing_message' not in st.session_state:
     st.session_state['pricing_message'] = ''
 
+if 'pricing_status' not in st.session_state:
+    st.session_state['pricing_status'] = ''
+    
 if 'pricing_error_message' not in st.session_state:
     st.session_state['pricing_error_message'] = pd.DataFrame()
     
 url = 'https://prod-37.southeastasia.logic.azure.com:443/workflows/8d3ee9a9b3bc46868eca0b23032e7c13/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=9TAwgb1TlIaN5SBi40BSN6S87LDXZSxY5Iniz1N-ND8'
+
+
+
+
 
 
 
@@ -60,6 +63,9 @@ def add_logo():
 add_logo()
 
     
+
+
+
 # --- Hide the Streamlit Menu Button and Trade Marks ---
 hide_menu = """
 <style>
@@ -70,21 +76,11 @@ footer {visibility: hidden;}
 st.markdown(hide_menu, unsafe_allow_html=True)
 
 
-
-# -- Declare containers --
-pageSection = st.container()
-placeholder = st.empty()
-statusMsgSection = st.container()
-errorMsgSection = st.container()
-retrySection = st.container()
-
-
-
-
-
-
-
-
+# --- Form Portion Ordering ---
+st.title('Crop Price Computation')
+placeholder1 = st.empty()
+statusMsg = st.empty()
+placeholder2 = st.empty()
 
 # -- Get Operating Unit Lookup Records --
 def get_OUKey(ou):
@@ -116,8 +112,6 @@ def get_BatchExcelName(ou):
         return 'SSP1_FFB Payment.xlsx'
     elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 2':
         return 'SSP2_FFB Payment.xlsx'
-
-
 
 # -- Trigger Azure Logic App to compute the crop payment pricing --
 async def processPricing(ou, batch):
@@ -152,7 +146,9 @@ async def processPricing(ou, batch):
 
                 df = pd.DataFrame(result)
                 st.session_state['pricing_error_message'] = df
-                # print(df)
+                print(df)
+                               
+
                 
             except pyodbc.Error as e:
                 st.write(f'Error executing query: {e}')
@@ -162,134 +158,116 @@ async def processPricing(ou, batch):
                 if conn:
                     conn.close()
             
-            if response.status == 200 and data['Status'] == 'Succeeded' and len(result) == 0:
+            if response.status == 200 and data['Status'] == 'Succeeded':
                 st.session_state['pricing_status'] = 'Succeeded'
                 st.session_state['pricing_message'] = 'Pricing computation done!'
+                statusMsg.success(st.session_state['pricing_message'])
             else:
                 st.session_state['pricing_status'] = 'Failed'
                 st.session_state['pricing_message'] = 'Error occured during pricing computation!'
+                statusMsg.error(st.session_state['pricing_message'])
+                
+                if st.session_state['pricing_error_message'].any().any():
+                    # Configure grid options using GridOptionsBuilder
+                    builder = GridOptionsBuilder.from_dataframe(st.session_state['pricing_error_message'])
+                    builder.configure_pagination(enabled=False)
+                    builder.configure_selection(selection_mode='single', use_checkbox=False)
+                    grid_options = builder.build()
 
-            
-def computePrice(ou, batch):
-    
-    st.session_state['pricing_status'] = 'Process'
-    st.session_state['pricing_message'] = 'Processing...'
-    
-    hide_MainPage()
-    show_StatusMsg()
-    hide_ErrorMsg() 
-    
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(processPricing(ou, batch)) 
-    
-    # time.sleep(3) 
-    # st.session_state['pricing_status'] = 'Succeeded'
-    # st.session_state['pricing_message'] = 'Pricing computation done!'
-    
-    st.markdown('#')
+                    # Display AgGrid
+                    st.write("Error Details: ")
+                    st.table(st.session_state['pricing_error_message'])
+                    # ag = AgGrid(st.session_state['pricing_error_message'],
+                    #         gridOptions=grid_options,
+                    #         editable=False,
+                    #         allow_unsafe_jscode=True,
+                    #         theme='balham',
+                    #         height=500,
+                    #         fit_columns_on_grid_load=True,
+                    #         reload_data=False)
+                
+                
+
 
 # -- UI Session --
-def show_MainPage():
-    with placeholder.container():
-    # with mainSection:
-        if st.session_state['pricing_status'] == '':
-            ou = st.selectbox(
-                'Mill: ',
-                ('LIBO SAWIT PERKASA PALM OIL MILL',
-                    'SEMUNAI SAWIT PERKASA PALM OIL MILL 1',
-                    'SEMUNAI SAWIT PERKASA PALM OIL MILL 2')
-                )
-
-            batch = st.number_input('Batch: ', 1)
-
-            st.markdown('#')
-
-            st.button('Process',
-                    on_click=computePrice,
-                    args=(ou, batch),
-                    help='Click to start process the pricing.')
-
-            st.markdown('#')
-
-            st.write('Please fill in all the information and click "Process" button.')
+# with placeholder.container():
+with placeholder1.container():
+    with st.form(key='cropPrice'):
         
+        ou = st.selectbox(
+            'Mill: ',
+            ('LIBO SAWIT PERKASA PALM OIL MILL',
+                'SEMUNAI SAWIT PERKASA PALM OIL MILL 1',
+                'SEMUNAI SAWIT PERKASA PALM OIL MILL 2')
+        )
 
-def hide_MainPage():
-    placeholder.empty()
-    
-def show_StatusMsg():
-    with statusMsgSection:
-        statusMsg.empty()
+        batch = st.number_input('Batch: ', 1)
+
+        st.markdown('#')
+
+        computePrice = st.form_submit_button(label='Process',
+                                            help='Click to start process the pricing.')
+
+        st.markdown('#')
+
+        st.write('Please fill in all the information and click "Process" button.')
         
-        if st.session_state['pricing_status'] == 'Process':
-            statusMsg.info(st.session_state['pricing_message'])
-        elif st.session_state['pricing_status'] == 'Succeeded':
-            statusMsg.success(st.session_state['pricing_message'])
-        elif st.session_state['pricing_status'] == 'Failed':
-            statusMsg.error(st.session_state['pricing_message'])
+    st.markdown('#')
+
+with placeholder2.container():
+    if st.session_state['pricing_error_message'].any().any():
+        # Configure grid options using GridOptionsBuilder
+        builder = GridOptionsBuilder.from_dataframe(st.session_state['pricing_error_message'])
+        builder.configure_pagination(enabled=False)
+        builder.configure_selection(selection_mode='single', use_checkbox=False)
+        grid_options = builder.build()
+
+        # Display AgGrid
+        st.write("Error Details: ")
+        st.table(st.session_state['pricing_error_message'])
+        # ag = AgGrid(st.session_state['pricing_error_message'],
+        #         gridOptions=grid_options,
+        #         editable=False,
+        #         allow_unsafe_jscode=True,
+        #         theme='balham',
+        #         height=500,
+        #         fit_columns_on_grid_load=True,
+        #         reload_data=False)
+       
         
-def show_ErrorMsg():
-    with errorMsgSection:
-        if st.session_state['pricing_error_message'].any().any():
-            # Configure grid options using GridOptionsBuilder
-            builder = GridOptionsBuilder.from_dataframe(st.session_state['pricing_error_message'])
-            builder.configure_pagination(enabled=False)
-            builder.configure_selection(selection_mode='single', use_checkbox=False)
-            grid_options = builder.build()
+# -- Keep and show the message --
+if st.session_state['pricing_status'] == 'Succeeded':
+    statusMsg.success(st.session_state['pricing_message'])
+elif st.session_state['pricing_status'] == 'Failed':
+    statusMsg.error(st.session_state['pricing_message'])
 
-            # Display AgGrid
-            st.write("Error Details: ")
-            st.table(st.session_state['pricing_error_message'])
-            # ag = AgGrid(st.session_state['pricing_error_message'],
-            #         gridOptions=grid_options,
-            #         editable=False,
-            #         allow_unsafe_jscode=True,
-            #         theme='balham',
-            #         height=500,
-            #         fit_columns_on_grid_load=True,
-            #         reload_data=False)
+# if st.session_state['pricing_error_message'].any().any():
+#     # Configure grid options using GridOptionsBuilder
+#     builder = GridOptionsBuilder.from_dataframe(st.session_state['pricing_error_message'])
+#     builder.configure_pagination(enabled=False)
+#     builder.configure_selection(selection_mode='single', use_checkbox=False)
+#     grid_options = builder.build()
 
-def hide_StatusMsg():
-    statusMsgSection.empty()
-    
-def hide_ErrorMsg():
-    errorMsgSection.empty()
-    
-def show_Retry():
-    with retrySection:
-        st.button('Retry',
-                    on_click=reset_Form,
-                    help='Click to retry.')
-        
-def hide_Retry():
-    retrySection.empty()
-
-def reset_Form():
-    st.session_state['pricing_status'] = ''
-    st.session_state['pricing_message'] = ''
-    st.session_state['pricing_error_message'] = ''
+#     # Display AgGrid
+#     st.write("Error Details: ")
+#     ag = AgGrid(st.session_state['pricing_error_message'],
+#             gridOptions=grid_options,
+#             editable=False,
+#             allow_unsafe_jscode=True,
+#             theme='balham',
+#             height=500,
+#             fit_columns_on_grid_load=True,
+#             reload_data=False)
 
 
-with pageSection:
-    st.title('Crop Price Computation')
-    statusMsg = st.empty()
-    
-    if st.session_state['pricing_status'] == '':
-        show_MainPage()
-        hide_StatusMsg()
-        hide_ErrorMsg()
-        hide_Retry()
-    elif st.session_state['pricing_status'] == 'Succeeded':
-        hide_MainPage()
-        show_StatusMsg()
-        hide_ErrorMsg()
-        hide_Retry()
-    elif st.session_state['pricing_status'] == 'Failed':
-        hide_MainPage()
-        show_StatusMsg()
-        show_ErrorMsg()
-        show_Retry()
+# -- If the 'Process' button being click, trigger to start the processing --
+if computePrice:
+    placeholder1.empty()
+    placeholder2.empty()
             
-        
-      
+    st.session_state['pricing_message'] = 'Processing...'
+    statusMsg.info(st.session_state['pricing_message'])
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(processPricing(ou, batch))
