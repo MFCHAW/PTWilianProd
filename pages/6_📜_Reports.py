@@ -2,6 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 from streamlit_extras.switch_page_button import switch_page
 
+# --- Auto Navigate to Login form if haven't login yet --
 if 'loggedIn' not in st.session_state:
     st.session_state['loggedIn'] = False
 
@@ -9,29 +10,65 @@ if st.session_state['loggedIn'] == False:
     switch_page('Home')
     st.stop()
 
-# st.title('Reports')
+
+# --- Display Client Logo ---
+def add_logo():
+    st.markdown(
+        """
+        <style>
+            [data-testid="stSidebarNav"] {
+                background-image: url('https://lmquartobistorage.blob.core.windows.net/pt-wilian-perkasa/PTWP_Logo.png');
+                background-repeat: no-repeat;
+                padding-top: 10px;
+                background-position: 50px 25px;
+            }
+            # [data-testid="stSidebarNav"]::before {
+            #     content: "FFB Procurement Application";
+            #     margin-left: 10px;
+            #     margin-top: 20px;
+            #     font-size: 19px;
+            #     position: relative;
+            #     top: 100px;
+            # }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+add_logo()
+
+
+# # --- Hide the Streamlit Menu Button and Trade Marks ---
+# applyStyle = """
+# <style>
+# #MainMenu {visibility: hidden;}
+# footer {visibility: hidden;}
+
+# *, ::before, ::after {
+#     box-sizing: content-box; /* Set back to default value */
+# }
+
+# .block-container {
+#                     padding-top: 0.5rem;
+#                     padding-bottom: 0rem;
+#                     padding-left: 0rem;
+#                     padding-right: 0rem;
+#                 }
+# </style>
+# """
+# st.markdown(applyStyle, unsafe_allow_html=True)
 
 # --- Hide the Streamlit Menu Button and Trade Marks ---
-applyStyle = """
+hide_menu = """
 <style>
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
-
-*, ::before, ::after {
-    box-sizing: content-box; /* Set back to default value */
-}
-
-.block-container {
-                    padding-top: 0.5rem;
-                    padding-bottom: 0rem;
-                    padding-left: 0rem;
-                    padding-right: 0rem;
-                }
 </style>
 """
-st.markdown(applyStyle, unsafe_allow_html=True)
+st.markdown(hide_menu, unsafe_allow_html=True)
 
 
+# -- Report Listing Options --
 reportList = ['Daily FFB Proceeds', 'FFB Proceeds Summary',
               'FFB Proceeds Detail', 'FFB Proceeds Statement']
 
@@ -39,6 +76,7 @@ comboBoxReport = st.sidebar.selectbox(
     'Please select a report: ',
     (reportList)
 )
+
 
 if comboBoxReport == 'Daily FFB Proceeds':
     js = '''
@@ -220,4 +258,4 @@ if comboBoxReport == 'Daily FFB Proceeds':
         </script>
     </body>
     </html>
-    """, width=None, height=900, scrolling=True)
+    """, width=None, height=1200, scrolling=True)

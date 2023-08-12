@@ -20,7 +20,7 @@ def add_logo():
                 background-image: url('https://lmquartobistorage.blob.core.windows.net/pt-wilian-perkasa/PTWP_Logo.png');
                 background-repeat: no-repeat;
                 padding-top: 10px;
-                background-position: 20px 20px;
+                background-position: 50px 25px;
             }
             # [data-testid="stSidebarNav"]::before {
             #     content: "FFB Procurement Application";
@@ -79,7 +79,8 @@ logOutSection = st.container()
 def show_main_page():
     with mainSection:
         # Page Title
-        st.title('Main Page')
+        print('Main Page')
+        # st.title('Main Page')
 
 
 def LoggedOut_Clicked():

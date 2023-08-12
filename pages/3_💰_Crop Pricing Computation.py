@@ -42,7 +42,7 @@ def add_logo():
                 background-image: url('https://lmquartobistorage.blob.core.windows.net/pt-wilian-perkasa/PTWP_Logo.png');
                 background-repeat: no-repeat;
                 padding-top: 10px;
-                background-position: 20px 20px;
+                background-position: 50px 25px;
             }
             # [data-testid="stSidebarNav"]::before {
             #     content: "FFB Procurement Application";
@@ -77,14 +77,6 @@ placeholder = st.empty()
 statusMsgSection = st.container()
 errorMsgSection = st.container()
 retrySection = st.container()
-
-
-
-
-
-
-
-
 
 # -- Get Operating Unit Lookup Records --
 def get_OUKey(ou):
