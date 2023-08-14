@@ -49,7 +49,7 @@ st.markdown(hide_menu, unsafe_allow_html=True)
 
 
 # -- Report Listing Options --
-reportList = ['Daily FFB Proceeds', 'FFB Proceeds Summary',
+reportList = ['FFB Receiption & Pricing', 'Daily FFB Proceeds', 'FFB Proceeds Summary',
               'FFB Proceeds Detail', 'FFB Proceeds Statement']
 
 comboBoxReport = st.sidebar.selectbox(
@@ -58,7 +58,7 @@ comboBoxReport = st.sidebar.selectbox(
 )
 
 
-if comboBoxReport == 'Daily FFB Proceeds':
+if comboBoxReport == 'FFB Receiption & Pricing':
     js = '''
     // Server Site (Function App) Url
     var getEmbedToken = "https://powerbisample-01.azurewebsites.net/api/HttpTriggerCSharp1?code=TY1xGH30Yxr0/W3SD/FJuvhHxIT0OfDbsLCjEL7Giky9lmx7NRTdYQ==";
@@ -70,7 +70,7 @@ if comboBoxReport == 'Daily FFB Proceeds':
     function previewReport() {
         $.ajax({
             url: getEmbedToken,
-            data: { PBIE_GROUP_ID: '1020b022-d65a-482a-8f98-4d999134954a', PBIE_REPORT_ID : '0efef870-1843-4fa4-829b-793fff4778b6'},
+            data: { PBIE_GROUP_ID: '645a9f59-ea89-457e-9a5a-68832c747f5a', PBIE_REPORT_ID : '7b7f5bc3-1f93-470a-99e3-1ada1e9032ee'},
             jsonpCallback: 'callback',
             contentType: 'application/javascript',
             dataType: "jsonp",
@@ -219,7 +219,7 @@ if comboBoxReport == 'Daily FFB Proceeds':
                 <div class="col-md-12">
                     <form>
                         <div class="col-md-12">
-                            <h1>Report Embedded Demo</h1>
+                            <h1>FFB Receiption & Pricing</h1>
                         </div>
                         <div class="col-md-12 mb-5">
                             <button type="button" class="btn btn-primary pull-right" onclick="reloadReport()">Reload Report</button>
