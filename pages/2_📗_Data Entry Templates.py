@@ -42,6 +42,7 @@ hide_menu = """
 <style>
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
+.viewerBadge_link_qRIco {visibility: hidden;}
 </style>
 """
 st.markdown(hide_menu, unsafe_allow_html=True)  
