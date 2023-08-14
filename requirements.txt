@@ -9,6 +9,6 @@ streamlit_javascript
 common
 streamlit_extras
 azure-storage-blob
-pyodbc
+pyodbc==4.0.34
 altair==4.2.2
 streamlit-aggrid
