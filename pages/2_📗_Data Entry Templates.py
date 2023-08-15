@@ -9,6 +9,34 @@ if st.session_state['loggedIn'] == False:
     switch_page('Home')
     st.stop()
     
+# -- Remove the 'Streamlit' label at Page title --    
+def set_page_title(title):
+    st.sidebar.markdown(unsafe_allow_html=True, body=f"""
+        <iframe height=0 srcdoc="<script>
+            const title = window.parent.document.querySelector('title') \
+                
+            const oldObserver = window.parent.titleObserver
+            if (oldObserver) {{
+                oldObserver.disconnect()
+            }} \
+
+            const newObserver = new MutationObserver(function(mutations) {{
+                const target = mutations[0].target
+                if (target.text !== '{title}') {{
+                    target.text = '{title}'
+                }}
+            }}) \
+
+            newObserver.observe(title, {{ childList: true }})
+            window.parent.titleObserver = newObserver \
+
+            title.text = '{title}'
+        </script>" />
+    """)
+
+
+set_page_title("PT Wilian - FFB Procurement")
+    
 
 # --- Display Client Logo ---
 def add_logo():
