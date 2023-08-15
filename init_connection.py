@@ -1,14 +1,17 @@
 import streamlit as st
-import pyodbc
+import pymssql
 
 def qconnection():
-    return pyodbc.connect(
-        "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
-        + st.secrets["server"]
-        + ";DATABASE="
-        + st.secrets["database"]
-        + ";UID="
-        + st.secrets["username"]
-        + ";PWD="
-        + st.secrets["password"]
-    )
+    return pymssql.connect(server='quarto-vm2.southeastasia.cloudapp.azure.com', port='14336', user='quartobi', password='Rohs85#', database='LONE_PTWP')  
+    
+    
+    # return pymssql.connect(
+    #     "server"
+    #     + st.secrets["server"]
+    #     + ";database="
+    #     + st.secrets["database"]
+    #     + ";user"
+    #     + st.secrets["username"]
+    #     + ";password"
+    #     + st.secrets["password"]
+    # )

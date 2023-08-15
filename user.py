@@ -1,5 +1,5 @@
 import streamlit as st
-import pyodbc
+import pymssql
 from init_connection import qconnection
 
 if 'UserKey' not in st.session_state:
@@ -8,13 +8,13 @@ if 'UserKey' not in st.session_state:
 
 def run_query(query, args):
     conn = qconnection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(as_dict=True)
 
     try:
-        cursor.execute(query, args[0], args[1], args[2])
+        cursor.callproc(query, args)
         return cursor.fetchall()
 
-    except pyodbc.Error as e:
+    except pymssql.Error as e:
         print(f'Error executing stored procesure: {e}')
         return False
     finally:
@@ -41,7 +41,7 @@ def getUserKey(userName, password):
 
         result = array1[0]['UserKey']
         
-    except pyodbc.Error as e:
+    except pymssql.Error as e:
         st.write(f'Error executing query: {e}')
     finally:
         if cursor:
@@ -55,8 +55,8 @@ def getUserKey(userName, password):
 def login(userName: str, password: str) -> bool:
     if (userName is None):
         return False
-    args = [userName, password, 0]
-    result = run_query('execute FPS_CheckUser ?, ?, ?', args)
+    args = (userName, password, 0)
+    result = run_query('FPS_CheckUser', args)
     if len(result) > 0:
         st.session_state['UserKey'] = getUserKey(userName, password)
         return True

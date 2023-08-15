@@ -2,7 +2,7 @@ import streamlit as st
 import asyncio
 import aiohttp
 import json
-import pyodbc
+import pymssql
 from streamlit_javascript import st_javascript
 from streamlit_extras.switch_page_button import switch_page
 from init_connection import qconnection
@@ -147,7 +147,7 @@ async def paymentPosting(ou, batch):
                 st.session_state['posting_error_message'] = df
                 # print(df)
                 
-            except pyodbc.Error as e:
+            except pymssql.Error as e:
                 st.write(f'Error executing query: {e}')
             finally:
                 if cursor:
