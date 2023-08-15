@@ -20,7 +20,7 @@ def add_logo():
                 background-image: url('https://lmquartobistorage.blob.core.windows.net/pt-wilian-perkasa/PTWP_Logo.png');
                 background-repeat: no-repeat;
                 padding-top: 10px;
-                background-position: 25px 25px;
+                background-position: 20px 25px;
             }
             # [data-testid="stSidebarNav"]::before {
             #     content: "FFB Procurement Application";
