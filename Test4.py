@@ -1,14 +1,14 @@
-import streamlit as st
-import pymssql
+import pandas as pd
+import streamlit as st 
 
-conn = pymssql.connect(server='quarto-vm2.southeastasia.cloudapp.azure.com', port='14336', user='quartobi', password='Rohs85#', database='LONE_PTWP')
-cursor = conn.cursor(as_dict=True)
+df = pd.read_csv("assets/titanic.csv")
 
-cursor.execute('Select * from GMS_UOMStp')
-for row in cursor:
-  print (row)
-  
-# for row in cursor:
-#     print("ID=%d, Name=%s" % (row['id'], row['name']))
+def highlight_survived(s):
+    return ['background-color: green']*len(s) if s.Survived else ['background-color: red']*len(s)
 
-conn.close()
+def color_survived(val):
+    color = 'green' if val else 'red'
+    return f'background-color: {color}'
+
+st.dataframe(df.style.apply(highlight_survived, axis=1))
+st.dataframe(df.style.applymap(color_survived, subset=['Survived']))
