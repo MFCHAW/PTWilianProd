@@ -160,10 +160,11 @@ async def processPricing(ou, batch):
             cursor = conn.cursor()
             
             try:
-                cursor.execute(f"""Select a.ErrorMsgDT as [Date Time], b.OUDesc as [Oil Mill], FPSBatchCode as [Batch No.], ErrorMsg as [Error Message] 
-                                    from FPS_YYT_BatchErrorList a left join GMS_OUStp b on a.OUKey = b.OUKey
-                                    Where a.OUKey = {get_OUKey(ou)} and a.FPSBatchCode = '{batch}' and 
-                                            a.ProcessType in ('EXCEL', 'PROFORMA')""")
+                cursor.execute(f"""Select a.ErrorMsgDT as [Date Time], b.OUDesc as [Oil Mill], 
+                                          FPSBatchCode as [Batch No.], ErrorMsg as [Error Message] 
+                                   from FPS_YYT_BatchErrorList a left join GMS_OUStp b on a.OUKey = b.OUKey
+                                   Where a.OUKey = {get_OUKey(ou)} and a.FPSBatchCode = '{batch}' and 
+                                         a.ProcessType in ('EXCEL', 'PROFORMA')""")
                 
                 result = []
                 columns = [column[0] for column in cursor.description]
