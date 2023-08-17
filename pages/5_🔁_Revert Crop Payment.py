@@ -116,28 +116,6 @@ def get_OUKey(ou):
     elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 2':
         return 9
 
-# -- Get Excel Template: 'Daily Pricing' Lookup Records --
-def get_PriceExcelName(ou):
-    if ou == 'LIBO SAWIT PERKASA PALM OIL MILL':
-        return 'LIBO_FFB Daily Pricing.xlsx'
-    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 1':
-        return 'SSP1_FFB Daily Pricing.xlsx'
-    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 2':
-        return 'SSP2_FFB Daily Pricing.xlsx'
-
-# -- Get Batch No String --
-def get_BatchSuppSheetName(batch):
-    return 'Batch' + str(batch)
-
-# -- Get Excel Template: 'Payment' Lookup Records --
-def get_BatchExcelName(ou):
-    if ou == 'LIBO SAWIT PERKASA PALM OIL MILL':
-        return 'LIBO_FFB Payment.xlsx'
-    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 1':
-        return 'SSP1_FFB Payment.xlsx'
-    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 2':
-        return 'SSP2_FFB Payment.xlsx'
-
 
 
 # -- Trigger Azure Logic App to revert the crop payment --
@@ -146,10 +124,7 @@ async def revertPosting(ou, batch):
     async with aiohttp.ClientSession(timeout=session_timeout) as session:
         async with session.post(url, data=json.dumps({
             "OUKey": get_OUKey(ou),
-            "Batch": batch,
-            "BatchSuppSheetName": get_BatchSuppSheetName(batch),
-            "PriceExcelName": get_PriceExcelName(ou),
-            "BatchExcelName": get_BatchExcelName(ou),
+            "FPSBatchCode": str(batch),
             "UserKey": st.session_state['UserKey']
         }, sort_keys=True), headers={'content-type': 'application/json'}) as response:
             data = await response.json()

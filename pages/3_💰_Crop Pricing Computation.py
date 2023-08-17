@@ -126,7 +126,7 @@ def get_PriceExcelName(ou):
 
 # -- Get Batch No String --
 def get_BatchSuppSheetName(batch):
-    return 'Batch' + str(batch)
+    return str(batch)
 
 # -- Get Excel Template: 'Payment' Lookup Records --
 def get_BatchExcelName(ou):

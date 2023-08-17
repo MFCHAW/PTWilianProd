@@ -77,8 +77,10 @@ st.markdown(hide_menu, unsafe_allow_html=True)
 
 
 # -- Report Listing Options --
-reportList = ['FFB Receiption & Pricing', 'Daily FFB Proceeds', 'FFB Proceeds Summary',
-              'FFB Proceeds Detail', 'FFB Proceeds Statement']
+reportList = ['FFB Receiption & Pricing', 
+              'FFB Receiption & Pricing by Batch', 
+              'FFB Proceed by Batch',
+              'Daily FFB Proceeds']
 
 comboBoxReport = st.sidebar.selectbox(
     'Please select a report: ',
