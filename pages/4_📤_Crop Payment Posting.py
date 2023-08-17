@@ -136,9 +136,10 @@ async def paymentPosting(ou, batch):
             cursor = conn.cursor()
             
             try:
-                cursor.execute(f"""Select OUKey, FPSBatchCode, ErrorMsg as [Error Message] 
-                                   from FPS_YYT_BatchErrorList 
-                                   Where OUKey = {get_OUKey(ou)} and FPSBatchCode = '{batch}' and 
+                cursor.execute(f"""Select a.ErrorMsgDT as [Date Time], b.OUDesc as [Oil Mill], 
+                                          FPSBatchCode as [Batch No.], ErrorMsg as [Error Message] 
+                                   from FPS_YYT_BatchErrorList a left join GMS_OUStp b on a.OUKey = b.OUKey
+                                   Where a.OUKey = {get_OUKey(ou)} and a.FPSBatchCode = '{batch}' and  
                                          ProcessType = 'POST'""")
                 
                 result = []
