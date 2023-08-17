@@ -183,7 +183,7 @@ async def processPricing(ou, batch):
                 if conn:
                     conn.close()
             
-            if response.status == 200 and data['Status'] == 'Succeeded' and len(result) == 0:
+            if response.status == 200 and data['Status'] != 'Failed' and len(result) == 0:
                 st.session_state['pricing_status'] = 'Succeeded'
                 st.session_state['pricing_message'] = 'Pricing computation done!'
             else:

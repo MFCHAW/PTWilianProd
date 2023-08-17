@@ -159,7 +159,7 @@ async def paymentPosting(ou, batch):
                 if conn:
                     conn.close()
             
-            if response.status == 200 and data['Status'] == 'Succeeded' and len(result) == 0:
+            if response.status == 200 and data['Status'] != 'Failed' and len(result) == 0:
                 st.session_state['posting_status'] = 'Succeeded'
                 st.session_state['posting_message'] = 'All related payments already being posted!'
             else:
