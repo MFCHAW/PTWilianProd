@@ -20,7 +20,7 @@ if 'pricing_message' not in st.session_state:
 if 'pricing_error_message' not in st.session_state:
     st.session_state['pricing_error_message'] = pd.DataFrame()
     
-url = 'https://prod-37.southeastasia.logic.azure.com:443/workflows/8d3ee9a9b3bc46868eca0b23032e7c13/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=9TAwgb1TlIaN5SBi40BSN6S87LDXZSxY5Iniz1N-ND8'
+url = st.secrets['url_PriceCompute']
 
 
 
