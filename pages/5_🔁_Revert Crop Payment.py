@@ -20,7 +20,7 @@ if 'revert_message' not in st.session_state:
 if 'revert_error_message' not in st.session_state:
     st.session_state['revert_error_message'] = pd.DataFrame()
     
-url = 'https://prod-49.southeastasia.logic.azure.com:443/workflows/cd58a1c846e54a2794b8fac4c60f1b44/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=4om0C7ETdfPwQa6i4xbz-Wc2NBGzsRSJokqwlSiwH_U'
+url = st.secrets['url_RevertPayment']
 
 
 

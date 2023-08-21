@@ -20,7 +20,9 @@ if 'posting_message' not in st.session_state:
 if 'posting_error_message' not in st.session_state:
     st.session_state['posting_error_message'] = pd.DataFrame()
     
-url = 'https://prod-44.southeastasia.logic.azure.com:443/workflows/389a4f7fe50a4859b5ad82e0c1e07a06/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=df4frEQoTAazd3SFMO6bs0NYlOW1GXFHXk5CnnUccko'
+url = st.secrets['url_PaymentPosting']
+
+
 
 
 
