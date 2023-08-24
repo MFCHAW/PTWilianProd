@@ -77,7 +77,7 @@ st.markdown(hide_menu, unsafe_allow_html=True)
 
 
 # -- Report Listing Options --
-reportList = ['FFB Receiption & Pricing', 
+reportList = ['FFB Reception & Pricing', 
               'FFB Receiption & Pricing by Batch', 
               'FFB Proceed by Batch',
               'Daily FFB Proceeds']
