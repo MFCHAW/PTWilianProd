@@ -282,7 +282,7 @@ with pageSection:
         hide_MainPage()
         show_StatusMsg()
         hide_ErrorMsg()
-        hide_Retry()
+        show_Retry()
     elif st.session_state['revert_status'] == 'Failed':
         hide_MainPage()
         show_StatusMsg()
