@@ -301,7 +301,10 @@ def lookup_Batch():
 
         df = pd.DataFrame(result)
         
-        return 'Batch: ' + df['FPSBatchCode'] + ' (' + df['FromDate'].dt.strftime("%d/%m/%Y") + ' - ' + df['ToDate'].dt.strftime("%d/%m/%Y") + ')'
+        if df.shape[0] == 0:
+            return ''
+        else:
+            return 'Batch: ' + df['FPSBatchCode'] + ' (' + df['FromDate'].dt.strftime("%d/%m/%Y") + ' - ' + df['ToDate'].dt.strftime("%d/%m/%Y") + ')'
         
     except pymssql.Error as e:
         st.write(f'Error executing query: {e}')
