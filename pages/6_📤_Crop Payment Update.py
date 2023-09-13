@@ -415,10 +415,12 @@ def show_MainPage():
 
             st.markdown('#')
 
-            st.button('Update Payment',
-                    on_click=updatePrice,
-                    args=(st.session_state['updatePrice_OUKey'], st.session_state['updatePrice_EstateCode'], batch),
-                    help='Click to start the payment posting.')
+            if st.session_state['updatePrice_Batch'] != '':
+                st.button('Update Payment',
+                        on_click=updatePrice,
+                        args=(st.session_state['updatePrice_OUKey'], st.session_state['updatePrice_EstateCode'], batch),
+                        help='Click to start the payment posting.')
+            
 
             st.markdown('#')
 
