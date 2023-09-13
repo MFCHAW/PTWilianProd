@@ -210,9 +210,10 @@ def get_Batch(batch):
 
         df = pd.DataFrame(result)
         
-        st.session_state['updatePrice_Batch'] = df['FPSBatchCode'].iloc[0]
-        
-        # print(st.session_state['updatePrice_Batch'])
+        if df.shape[0] == 0:
+            st.session_state['updatePrice_Batch'] = ''
+        else:
+            st.session_state['updatePrice_Batch'] = df['FPSBatchCode'].iloc[0]
         
     except pymssql.Error as e:
         st.write(f'Error executing query: {e}')
