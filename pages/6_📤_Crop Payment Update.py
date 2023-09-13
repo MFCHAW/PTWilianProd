@@ -204,7 +204,7 @@ def get_Batch(batch):
         
         st.session_state['updatePrice_Batch'] = df['FPSBatchCode'].iloc[0]
         
-        print(st.session_state['updatePrice_Batch'])
+        # print(st.session_state['updatePrice_Batch'])
         
     except pymssql.Error as e:
         st.write(f'Error executing query: {e}')
@@ -310,7 +310,7 @@ async def updatePricing(ou, estateCode, batch):
         async with session.post(url, data=json.dumps({
             "OUKey": str(st.session_state['updatePrice_OUKey']),
             "EstateCode": st.session_state['updatePrice_EstateCode'],
-            "FPSBatchCode": str(batch),
+            "FPSBatchCode": str(st.session_state['updatePrice_Batch']),
             "UserKey": st.session_state['UserKey']
         }, sort_keys=True), headers={'content-type': 'application/json'}) as response:
             data = await response.json()
