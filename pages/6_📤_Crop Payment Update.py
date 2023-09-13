@@ -33,6 +33,9 @@ if 'updatePrice_OUKey' not in st.session_state:
 if 'updatePrice_OUKey' not in st.session_state:
     st.session_state['updatePrice_OUKey'] = 0
     
+if 'updatePrice_TemplateName' not in st.session_state:
+    st.session_state['updatePrice_TemplateName'] = ''
+    
 url = st.secrets['url_PriceUpdating']
 
 
@@ -139,7 +142,12 @@ def get_OUKey(ou):
         
         st.session_state['updatePrice_OUKey'] = df['OUKey'].iloc[0]
         
-        # return df['OUKey'].iloc[0]
+        if st.session_state['updatePrice_OUKey'] == 6:
+            st.session_state['updatePrice_TemplateName'] = 'Libo_FFB Daily Pricing.xlsx'
+        elif st.session_state['updatePrice_OUKey'] == 8:
+            st.session_state['updatePrice_TemplateName'] = 'SSP1_FFB Daily Pricing.xlsx'
+        elif st.session_state['updatePrice_OUKey'] == 9:
+            st.session_state['updatePrice_TemplateName'] = 'SSP2_FFB Daily Pricing.xlsx'
         
     except pymssql.Error as e:
         st.write(f'Error executing query: {e}')
@@ -213,6 +221,7 @@ def get_Batch(batch):
             cursor.close()
         if conn:
             conn.close()
+            
     
     
 # -- Get Operating Unit Lookup Records --
@@ -311,6 +320,7 @@ async def updatePricing(ou, estateCode, batch):
             "OUKey": str(st.session_state['updatePrice_OUKey']),
             "EstateCode": st.session_state['updatePrice_EstateCode'],
             "FPSBatchCode": str(st.session_state['updatePrice_Batch']),
+            "PriceExcelName": st.session_state['updatePrice_TemplateName'],
             "UserKey": st.session_state['UserKey']
         }, sort_keys=True), headers={'content-type': 'application/json'}) as response:
             data = await response.json()
