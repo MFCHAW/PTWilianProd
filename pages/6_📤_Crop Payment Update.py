@@ -422,9 +422,9 @@ def show_MainPage():
                         help='Click to start the payment posting.')
             
 
-            st.markdown('#')
+                st.markdown('#')
 
-            st.write('Please fill in all the information and click "Update Payment" button.')
+                st.write('Please fill in all the information and click "Update Payment" button.')
 
 def hide_MainPage():
     placeholder.empty()
