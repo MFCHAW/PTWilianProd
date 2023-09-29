@@ -138,9 +138,8 @@ def get_BatchExcelName(ou):
         return 'SSP2_FFB Payment.xlsx'
 
 
-
 # -- Trigger Azure Logic App to compute the crop payment pricing --
-async def processPricing(ou, batch):
+async def processPricing(ou, batch, yrmth):
     session_timeout = aiohttp.ClientTimeout(total=60 * 60 * 24)
     async with aiohttp.ClientSession(timeout=session_timeout) as session:
         async with session.post(url, data=json.dumps({
@@ -222,7 +221,7 @@ def show_MainPage():
                     'SEMUNAI SAWIT PERKASA PALM OIL MILL 1',
                     'SEMUNAI SAWIT PERKASA PALM OIL MILL 2')
                 )
-
+            
             batch = st.number_input('Batch: ', 1)
 
             st.markdown('#')
