@@ -139,7 +139,7 @@ def get_BatchExcelName(ou):
 
 
 # -- Trigger Azure Logic App to compute the crop payment pricing --
-async def processPricing(ou, batch, yrmth):
+async def processPricing(ou, batch):
     session_timeout = aiohttp.ClientTimeout(total=60 * 60 * 24)
     async with aiohttp.ClientSession(timeout=session_timeout) as session:
         async with session.post(url, data=json.dumps({
