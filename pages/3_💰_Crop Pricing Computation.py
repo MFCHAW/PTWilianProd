@@ -2,7 +2,8 @@ import streamlit as st
 import asyncio
 import aiohttp
 import json
-import pymssql
+import pandas as pd
+# import pymssql
 from streamlit_javascript import st_javascript
 from streamlit_extras.switch_page_button import switch_page
 from init_connection import qconnection
@@ -21,7 +22,7 @@ if 'pricing_error_message' not in st.session_state:
     st.session_state['pricing_error_message'] = pd.DataFrame()
     
 url = st.secrets['url_PriceCompute']
-
+url_ErrorList = st.secrets['url_ErrorList']
 
 
 # --- Auto Navigate to Login form if haven't login yet --
@@ -136,6 +137,32 @@ def get_BatchExcelName(ou):
         return 'SSP1_FFB Payment.xlsx'
     elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 2':
         return 'SSP2_FFB Payment.xlsx'
+    
+    
+async def errorList(oukey, batch, stage):
+    session_timeout = aiohttp.ClientTimeout(total=60 * 60 * 24)
+    async with aiohttp.ClientSession(timeout=session_timeout) as session:
+        async with session.post(url_ErrorList, data=json.dumps({
+            "oukey": oukey,
+            "batch": batch,
+            "stage": stage
+        }, sort_keys=True), headers={'content-type': 'application/json'}) as response:
+            data = await response.json()
+            
+            df = pd.DataFrame(data['ResultSets'])
+            
+            if len(df) == 0:
+                st.session_state['pricing_status'] = 'Succeeded'
+                st.session_state['pricing_message'] = 'Pricing computation done!'
+            else:
+                df = pd.DataFrame(data['ResultSets']['Table1'])
+                st.session_state['pricing_error_message'] = df
+                st.session_state['pricing_status'] = 'Failed'
+                st.session_state['pricing_message'] = 'Error occured during pricing computation!'
+                
+
+
+
 
 
 # -- Trigger Azure Logic App to compute the crop payment pricing --
@@ -151,44 +178,43 @@ async def processPricing(ou, batch):
             "UserKey": st.session_state['UserKey']
         }, sort_keys=True), headers={'content-type': 'application/json'}) as response:
             data = await response.json()
-            print(data)
-
-            # -- Check the ErrorList table got records. --
-            # -- If got record, system show error and return the error records --
-            conn = qconnection()
-            cursor = conn.cursor()
             
-            try:
-                cursor.execute(f"""Select a.ErrorMsgDT as [Date Time], b.OUDesc as [Oil Mill], 
-                                          FPSBatchCode as [Batch No.], ErrorMsg as [Error Message] 
-                                   from FPS_YYT_BatchErrorList a left join GMS_OUStp b on a.OUKey = b.OUKey
-                                   Where a.OUKey = {get_OUKey(ou)} and a.FPSBatchCode = '{batch}' and 
-                                         a.ProcessType in ('EXCEL', 'PROFORMA')""")
-                
-                result = []
-                columns = [column[0] for column in cursor.description]
-                for row in cursor.fetchall():
-                    result.append(dict(zip(columns, row)))
-
-                df = pd.DataFrame(result)
-                st.session_state['pricing_error_message'] = df
-                # print(df)
-                
-            except pymssql.Error as e:
-                st.write(f'Error executing query: {e}')
-            finally:
-                if cursor:
-                    cursor.close()
-                if conn:
-                    conn.close()
+            ## -- Check the ErrorList table got records. --
+            ## -- If got record, system show error and return the error records --
+            # conn = qconnection()
+            # cursor = conn.cursor()
             
-            # if response.status == 200 and data['Status'] != 'Failed' and len(result) == 0:
-            if len(result) == 0:
-                st.session_state['pricing_status'] = 'Succeeded'
-                st.session_state['pricing_message'] = 'Pricing computation done!'
-            else:
-                st.session_state['pricing_status'] = 'Failed'
-                st.session_state['pricing_message'] = 'Error occured during pricing computation!'
+            # try:
+            #     cursor.execute(f"""Select a.ErrorMsgDT as [Date Time], b.OUDesc as [Oil Mill], 
+            #                               FPSBatchCode as [Batch No.], ErrorMsg as [Error Message] 
+            #                        from FPS_YYT_BatchErrorList a left join GMS_OUStp b on a.OUKey = b.OUKey
+            #                        Where a.OUKey = {get_OUKey(ou)} and a.FPSBatchCode = '{batch}' and 
+            #                              a.ProcessType in ('EXCEL', 'PROFORMA')""")
+                
+            #     result = []
+            #     columns = [column[0] for column in cursor.description]
+            #     for row in cursor.fetchall():
+            #         result.append(dict(zip(columns, row)))
+
+            #     df = pd.DataFrame(result)
+            #     st.session_state['pricing_error_message'] = df
+            #     # print(df)
+                
+            # except pymssql.Error as e:
+            #     st.write(f'Error executing query: {e}')
+            # finally:
+            #     if cursor:
+            #         cursor.close()
+            #     if conn:
+            #         conn.close()
+            
+            # # if response.status == 200 and data['Status'] != 'Failed' and len(result) == 0:
+            # if len(result) == 0:
+            #     st.session_state['pricing_status'] = 'Succeeded'
+            #     st.session_state['pricing_message'] = 'Pricing computation done!'
+            # else:
+            #     st.session_state['pricing_status'] = 'Failed'
+            #     st.session_state['pricing_message'] = 'Error occured during pricing computation!'
 
             
 def computePrice(ou, batch):
@@ -203,6 +229,10 @@ def computePrice(ou, batch):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(processPricing(ou, batch)) 
+    
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(errorList(get_OUKey(ou), batch, 'PROFORMA')) 
     
     # time.sleep(3) 
     # st.session_state['pricing_status'] = 'Succeeded'

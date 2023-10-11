@@ -109,8 +109,9 @@ logOutSection = st.container()
 def show_main_page():
     with mainSection:
         # Page Title
-        print('Main Page')
+        # print('Main Page')
         # st.title('Main Page')
+        pass
 
 
 def LoggedOut_Clicked():
