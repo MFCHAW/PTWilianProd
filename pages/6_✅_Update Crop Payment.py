@@ -331,7 +331,7 @@ async def supplierList(oukey):
             
             df = pd.DataFrame(data['ResultSets']['Table1'])
             
-            st.session_state['updatePrice_SupplierList'] = df['EstateCode'] + ' - ' + df['EstateDesc']
+            st.session_state['updatePrice_SupplierList'] = df['Code'] + ' - ' + df['Supplier']
             
             
 

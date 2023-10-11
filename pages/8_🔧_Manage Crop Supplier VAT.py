@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import pymssql
+# import pymssql
 import json
 import asyncio
 import aiohttp
@@ -18,11 +18,13 @@ if 'manageVAT_OUKey' not in st.session_state:
 if 'manageVAT_SupplierList' not in st.session_state:
     st.session_state['manageVAT_SupplierList'] = []
     
-if 'pre_selected_rows' not in st.session_state:
-    st.session_state['pre_selected_rows'] = []
+# if 'pre_selected_rows' not in st.session_state:
+#     st.session_state['pre_selected_rows'] = []
     
+   
 
 url = st.secrets['url_UpdateVAT']
+url_SupplierList = st.secrets['url_SupplierList']
 
 
 # --- Auto Navigate to Login form if haven't login yet --
@@ -106,105 +108,137 @@ statusMsgSection = st.container()
 errorMsgSection = st.container()
 
 
-# -- Get Operating Unit Lookup Records --
-def lookup_OperatingUnit():
-    conn = qconnection()
-    cursor = conn.cursor()
+# # -- Get Operating Unit Lookup Records --
+# def lookup_OperatingUnit():
+#     conn = qconnection()
+#     cursor = conn.cursor()
 
-    try:
-        cursor.execute(f"""select OUKey, OUCode, OUDesc
-                           from GMS_OUStp
-                           Where OperationTypeKey = 3""")
+#     try:
+#         cursor.execute(f"""select OUKey, OUCode, OUDesc
+#                            from GMS_OUStp
+#                            Where OperationTypeKey = 3""")
         
-        result = []
-        columns = [column[0] for column in cursor.description]
-        for row in cursor.fetchall():
-            result.append(dict(zip(columns, row)))
+#         result = []
+#         columns = [column[0] for column in cursor.description]
+#         for row in cursor.fetchall():
+#             result.append(dict(zip(columns, row)))
 
-        df = pd.DataFrame(result)
+#         df = pd.DataFrame(result)
         
-        return df['OUCode'] + ' - ' + df['OUDesc']
+#         return df['OUCode'] + ' - ' + df['OUDesc']
         
-    except pymssql.Error as e:
-        st.write(f'Error executing query: {e}')
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+#     except pymssql.Error as e:
+#         st.write(f'Error executing query: {e}')
+#     finally:
+#         if cursor:
+#             cursor.close()
+#         if conn:
+#             conn.close()
 
 # -- Get Operating Unit Key --
 def get_OUKey(ou):
     
-    conn = qconnection()
-    cursor = conn.cursor()
+    if ou == 'LIBO SAWIT PERKASA PALM OIL MILL':
+        st.session_state['manageVAT_OUKey'] = 6
+    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 1':
+        st.session_state['manageVAT_OUKey'] = 8
+    elif ou == 'SEMUNAI SAWIT PERKASA PALM OIL MILL 2':
+        st.session_state['manageVAT_OUKey'] = 9
 
-    try:
-        cursor.execute(f"""select OUKey
-                           from GMS_OUStp
-                           Where OperationTypeKey = 3 and OUCode + ' - ' + OUDesc = '{ou}'""")
+        
+    # conn = qconnection()
+    # cursor = conn.cursor()
+
+    # try:
+    #     cursor.execute(f"""select OUKey
+    #                        from GMS_OUStp
+    #                        Where OperationTypeKey = 3 and OUCode + ' - ' + OUDesc = '{ou}'""")
                 
-        result = []
-        columns = [column[0] for column in cursor.description]
-        for row in cursor.fetchall():
-            result.append(dict(zip(columns, row)))
+    #     result = []
+    #     columns = [column[0] for column in cursor.description]
+    #     for row in cursor.fetchall():
+    #         result.append(dict(zip(columns, row)))
 
-        df = pd.DataFrame(result)
+    #     df = pd.DataFrame(result)
         
-        st.session_state['manageVAT_OUKey'] = df['OUKey'].iloc[0]
+    #     st.session_state['manageVAT_OUKey'] = df['OUKey'].iloc[0]
         
-    except pymssql.Error as e:
-        st.write(f'Error executing query: {e}')
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+    # except pymssql.Error as e:
+    #     st.write(f'Error executing query: {e}')
+    # finally:
+    #     if cursor:
+    #         cursor.close()
+    #     if conn:
+    #         conn.close()
+    
+async def supplierList(oukey):
+    session_timeout = aiohttp.ClientTimeout(total=60 * 60 * 24)
+    async with aiohttp.ClientSession(timeout=session_timeout) as session:
+        async with session.post(url_SupplierList, data=json.dumps({
+            "oukey": oukey
+        }, sort_keys=True), headers={'content-type': 'application/json'}) as response:
+            data = await response.json()
+            
+            df = pd.DataFrame(data['ResultSets']['Table1'])
+            
+            st.session_state['manageVAT_SupplierList'] = df
            
             
-def get_CropSuplierList(oukey):
-    conn = qconnection()
-    cursor = conn.cursor()
+def lookup_SupplierList(oukey):
+    
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(supplierList(oukey)) 
+    
+    # conn = qconnection()
+    # cursor = conn.cursor()
 
-    try:
-        cursor.execute(f"""select EstateCode as [Code], 
-                                EstateDesc as [Supplier],
-                                PPNType as [VAT Type],
-                                IsPPNInPymt as [Include in Payment]
-                           from GMS_EstateStp
-                           where EstateKey <> -1 and Active = 1
-                                 and OUKey =  '{oukey}'""")
+    # try:
+    #     cursor.execute(f"""select EstateCode as [Code], 
+    #                             EstateDesc as [Supplier],
+    #                             PPNType as [VAT Type],
+    #                             IsPPNInPymt as [Include in Payment]
+    #                        from GMS_EstateStp
+    #                        where EstateKey <> -1 and Active = 1
+    #                              and OUKey =  '{oukey}'""")
                 
-        result = []
-        columns = [column[0] for column in cursor.description]
-        for row in cursor.fetchall():
-            result.append(dict(zip(columns, row)))
+    #     result = []
+    #     columns = [column[0] for column in cursor.description]
+    #     for row in cursor.fetchall():
+    #         result.append(dict(zip(columns, row)))
 
-        df = pd.DataFrame(result)
+    #     df = pd.DataFrame(result)
         
-        st.session_state['manageVAT_SupplierList'] = df
+    #     st.session_state['manageVAT_SupplierList'] = df
         
-    except pymssql.Error as e:
-        st.write(f'Error executing query: {e}')
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+    # except pymssql.Error as e:
+    #     st.write(f'Error executing query: {e}')
+    # finally:
+    #     if cursor:
+    #         cursor.close()
+    #     if conn:
+    #         conn.close()
     
 
 
 # -- UI Session --
 def show_MainPage():
     with placeholder.container():
+        # ou = st.selectbox(
+        #     'Mill: ',
+        #     lookup_OperatingUnit()
+        # )
+        
         ou = st.selectbox(
-            'Mill: ',
-            lookup_OperatingUnit()
-        )
+                    'Mill: ',
+                    ('LIBO SAWIT PERKASA PALM OIL MILL',
+                     'SEMUNAI SAWIT PERKASA PALM OIL MILL 1',
+                     'SEMUNAI SAWIT PERKASA PALM OIL MILL 2')
+                )
         
         get_OUKey(ou)
         
-        get_CropSuplierList(st.session_state['manageVAT_OUKey'])
+        lookup_SupplierList(st.session_state['manageVAT_OUKey'])
         
         st.markdown('#')
         
