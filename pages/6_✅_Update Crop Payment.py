@@ -544,7 +544,7 @@ def show_MainPage():
             
             get_OUKey(ou)
             
-            time.sleep(3) 
+            # time.sleep(3) 
             
             lookup_SupplierList(st.session_state['updatePrice_OUKey'])
             

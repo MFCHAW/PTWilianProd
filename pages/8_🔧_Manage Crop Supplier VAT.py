@@ -17,6 +17,12 @@ if 'manageVAT_OUKey' not in st.session_state:
 
 if 'manageVAT_SupplierList' not in st.session_state:
     st.session_state['manageVAT_SupplierList'] = []
+    
+if 'pre_selected_rows' not in st.session_state:
+    st.session_state['pre_selected_rows'] = []
+    
+
+url = st.secrets['url_UpdateVAT']
 
 
 # --- Auto Navigate to Login form if haven't login yet --
@@ -96,7 +102,8 @@ st.markdown(hide_menu, unsafe_allow_html=True)
 # -- Declare containers --
 pageSection = st.container()
 placeholder = st.empty()
-
+statusMsgSection = st.container()
+errorMsgSection = st.container()
 
 
 # -- Get Operating Unit Lookup Records --
@@ -202,11 +209,12 @@ def show_MainPage():
         st.markdown('#')
         
         with st.container():
-            left_column, right_column = st.columns((1, 2))
+            left_column, right_column = st.columns((2, 2))
             
             with left_column:
                 # Configure grid options using GridOptionsBuilder
                 builder = GridOptionsBuilder.from_dataframe(st.session_state['manageVAT_SupplierList'])
+                
                 builder.configure_pagination(enabled=False)
                 builder.configure_selection(selection_mode='single', use_checkbox=False)
                 grid_options = builder.build()
@@ -223,23 +231,48 @@ def show_MainPage():
                             fit_columns_on_grid_load=True,
                             reload_data=False)
                 
+                
             with right_column:
                 code = st.text_input('Code', value=ag['selected_rows'][0]['Code'] if len(ag['selected_rows']) == 1 else '', disabled=True)
                 supplier = st.text_input('Supplier', value=ag['selected_rows'][0]['Supplier'] if len(ag['selected_rows']) == 1 else '', disabled=True)
-            
-                print(ag['selected_rows'][0]['VAT Type'])
-            
+         
                 vat = st.selectbox(
                             'VAT Type: ',
-                            options=['', 'PPN', 'PPNPUT'],
-                            index=1
-                            #ag['selected_rows'][0]['VAT Type'] if len(ag['selected_rows']) == 1 else ''
-                            #on_change=ag['selected_rows'][0]['VAT Type'] if len(ag['selected_rows']) == 1 else ''
+                            options=[ag['selected_rows'][0]['VAT Type'] if len(ag['selected_rows']) == 1 else '','', 'PPN', 'PPNPUT'],
+                            index=0
                         )
+                
+                incPay = st.checkbox('Include in Payment',
+                                     ag['selected_rows'][0]['Include in Payment'] if len(ag['selected_rows']) == 1 else 0)
         
-        
+                st.button('Update',
+                    on_click=updateVAT,
+                    args=(st.session_state['manageVAT_OUKey'], code, vat, incPay),
+                    help='Click to update the crop supplier VAT.')
 
 
+def updateVAT(oukey, code, vat, incPay):
+    
+    st.session_state['manageVAT_status'] = 'Update'
+    st.session_state['manageVAT_message'] = 'Updating...'
+    
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(updatingVAT(oukey, code, vat, incPay)) 
+
+
+async def updatingVAT(oukey, code, vat, incPay):
+    session_timeout = aiohttp.ClientTimeout(total=60 * 60 * 24)
+    async with aiohttp.ClientSession(timeout=session_timeout) as session:
+        async with session.post(url, data=json.dumps({
+            "OUKey": str(oukey),
+            "EstateCode": code,
+            "PPNType": vat,
+            "IsPPNInPymt": incPay
+        }, sort_keys=True), headers={'content-type': 'application/json'}) as response:
+            data = await response.json()
+            
+            
 with pageSection:
     st.title('Manage Crop Supplier VAT')
     statusMsg = st.empty()
