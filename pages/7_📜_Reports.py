@@ -1161,7 +1161,7 @@ elif comboBoxReport == 'FFB Receipts Due For Payment':
                 <div class="col-md-12">
                     <form>
                         <div class="col-md-12">
-                            <h1>FFB Procurement Posting Enquiry</h1>
+                            <h1>FFB Receipts Due For Paymenty</h1>
                         </div>
                         <div class="col-md-12 mb-5">
                             <button type="button" class="btn btn-primary pull-right" onclick="reloadReport()">Reload Report</button>
