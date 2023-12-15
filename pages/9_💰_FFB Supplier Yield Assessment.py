@@ -9,8 +9,10 @@ from st_aggrid import AgGrid, GridOptionsBuilder, ColumnsAutoSizeMode
 import numpy as np
 from pytz import timezone
 import io
+import time
 
 url = st.secrets['url_SupYieldAssess']
+
 
 #################################
 # Session States Initialization #
@@ -364,7 +366,7 @@ if st.session_state['loggedIn'] == False:
     switch_page('Home')
     st.stop()
     
-# -- Remove the 'Streamlit' label at Page title --    
+# -- Remove the 'Streamlit' label at Page title --  
 def set_page_title(title):
     st.sidebar.markdown(unsafe_allow_html=True, body=f"""
         <iframe height=0 srcdoc="<script>
@@ -488,7 +490,6 @@ async def SubmitPricing(Date, ouKey, CPOTdPrice, CPOProCharges, CPOTransCharges,
             st.session_state['yieldassess_btnSubmit_disabled'] = True
             
 
-
 def Submit(Date, ouKey, CPOTdPrice, CPOProCharges, CPOTransCharges, 
            PKTdPrice, PKProCharges, PKTransCharges, RendPK,
            ShellTdPrice, ShellProCharges, ShellTransCharges, RendShell,
@@ -548,12 +549,14 @@ async def DisplaySupplierGridRecords(OUKey, Date):
                 st.session_state['yieldassess_SupplierList'] = df
             else:
                 st.session_state['yieldassess_SupplierList'] = []
-    
+
+
 def Call_DisplayGridRecords(ouKey, fromDate, toDate):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(DisplayGridRecords(ouKey, fromDate, toDate)) 
-    
+
+   
 def Call_DisplaySupplierGridRecords(ouKey, Date):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
@@ -575,6 +578,7 @@ def New():
     
     EmptyRecords()
     ControlAllowEdit()
+
     
 def ControlAllowEdit():
     st.session_state['yieldassess_CPOTdPrice_disabled'] = False
@@ -597,6 +601,7 @@ def ControlAllowEdit():
     st.session_state['yieldassess_CPOTransCost_disabled'] = False
     st.session_state['yieldassess_PKTransCost_disabled'] = False
     st.session_state['yieldassess_ShrinkageCost_disabled'] = False
+
     
 def ControlNotAllowEdit():
     st.session_state['yieldassess_CPOTdPrice_disabled'] = True
@@ -619,6 +624,7 @@ def ControlNotAllowEdit():
     st.session_state['yieldassess_CPOTransCost_disabled'] = True
     st.session_state['yieldassess_PKTransCost_disabled'] = True
     st.session_state['yieldassess_ShrinkageCost_disabled'] = True
+
 
 def EmptyRecords():
     # CPO Price
@@ -692,7 +698,7 @@ def EmptyRecords():
     # Total Revenue
     st.session_state['yieldassess_TotalRevenue'] = 0.00
     
-    
+ 
 def Edit():
     st.session_state['yieldassess_Status'] = 'Edit'
     st.session_state['yieldassess_btnNew_disabled'] = True
@@ -748,7 +754,8 @@ def Delete(Date, ouKey):
     st.session_state['yieldassess_btnSubmit_disabled'] = True
     
     st.markdown('#')
-    
+ 
+   
 def Cancel():
     st.session_state['yieldassess_Status'] = ''
     st.session_state['yieldassess_btnNew_disabled'] = False
@@ -761,6 +768,7 @@ def Cancel():
     st.session_state['yieldassess_Date_disabled'] = True
     
     ControlNotAllowEdit()
+
 
 def to_excel(df) -> bytes:
     output = io.BytesIO()
@@ -937,7 +945,6 @@ def show_MainPage():
         tab1, tab2 = st.tabs(['Calculation', 'Supplier Pricing & OER'])
         
         with tab1:
-        
             col3_1, col3_2, col3_3, col3_4, col3_5, col3_6, col3_7= st.columns([25, 25, 10, 10, 10, 10, 10]) # Mill and Date
             
             # Create an anchor point at here
@@ -968,6 +975,7 @@ def show_MainPage():
             st.markdown('<a name="expenses"></a>', unsafe_allow_html=True)
             
             st.error('##### Expenses')
+            
             col13_1, col13_2, col13_3, col13_4, col13_5, col13_6 = st.columns([42, 18, 2, 18, 2, 18]) # FFB Procurement Amount
             col14_1, col14_2, col14_3, col14_4, col14_5, col14_6 = st.columns([42, 18, 2, 18, 2, 18]) # CPO Production Cost
             col15_1, col15_2, col15_3, col15_4, col15_5, col15_6 = st.columns([42, 18, 2, 18, 2, 18]) # PK Production Cost
@@ -977,9 +985,10 @@ def show_MainPage():
             col19_1, col19_2, col19_3, col19_4, col19_5, col19_6 = st.columns([42, 18, 2, 18, 2, 18]) # Shrinkage Cost
             col20_1, col20_2 = st.columns([82, 18]) # Total Expenses
             
-            col21_1, col21_2 = st.columns([82, 18]) # Profit & Loss
+            col21_1, col21_2 = st.columns([82, 18]) # Profit & Loss`
             
-            
+        
+        
             st.markdown('[Scroll to Pricing](#pricing) | [Scroll to Top](#top)')
             
             # Define the style of the Number Fields and Text Fields
@@ -1064,7 +1073,7 @@ def show_MainPage():
             #     )
             
             
-                    
+            
             ######################################################
             # Mill, Date, New Record, Edit Record, Submit Record #
             ######################################################
@@ -1132,7 +1141,8 @@ def show_MainPage():
                             help='Click to submit record.',
                             disabled=st.session_state['yieldassess_btnSubmit_disabled'],
                             use_container_width=True)
-                    
+            
+                
             
             #############################
             # CPO, PK and Shell Pricing #
@@ -1638,6 +1648,8 @@ def show_MainPage():
                     st.text_input('', key='yieldassess_ProfitAndLoss', disabled=True)     
         
         
+        
+        
         # Supplier Pricing & OER Grid
         with tab2:
             
@@ -1648,62 +1660,63 @@ def show_MainPage():
             col23_1, col23_2 = st.columns([60, 40])
             
             
-            
             with st.container():
                 with col23_1:
                     # Configure grid options using GridOptionsBuilder
                     if len(st.session_state['yieldassess_RecordList']) != 0 and len(ag['selected_rows']) == 1:
+                       
                         Call_DisplaySupplierGridRecords(st.session_state['yieldassess_OUKey'], st.session_state['yieldassess_Date'])
-                    
-                        builder2 = GridOptionsBuilder.from_dataframe(st.session_state['yieldassess_SupplierList'])
-                        builder2.configure_pagination(enabled=False)
-                        # builder2.configure_selection(selection_mode='single', use_checkbox=False)
-                        builder2.configure_default_column(
-                            resizable=True,
-                            filterable=True,
-                            sortable=True,
-                            editable=False
-                        )
-                        builder2.configure_column(
-                            field='FFBPrice',
-                            header_name='FFB Unit Price',
-                            type=["numericColumn", "numberColumnFilter", "customNumericFormat"],
-                            precision=2
-                        )
-                        builder2.configure_column(
-                            field='Weight',
-                            header_name='Weight (kg)',
-                            type=["numericColumn", "numberColumnFilter", "customNumericFormat"],
-                            precision=2
-                        )
-                        builder2.configure_column(
-                            field='Amount',
-                            type=["numericColumn", "numberColumnFilter", "customNumericFormat"],
-                            precision=2
-                        )
-                        builder2.configure_column(
-                            field='OER',
-                            header_name='OER (%)',
-                            type=["numericColumn", "numberColumnFilter", "customNumericFormat"],
-                            precision=2
-                        )
-                        grid_options2 = builder2.build()
+                        
+                        if len(st.session_state['yieldassess_SupplierList']) != 0:
+                            builder2 = GridOptionsBuilder.from_dataframe(st.session_state['yieldassess_SupplierList'])
+                            builder2.configure_pagination(enabled=False)
+                            # builder2.configure_selection(selection_mode='single', use_checkbox=False)
+                            builder2.configure_default_column(
+                                resizable=True,
+                                filterable=True,
+                                sortable=True,
+                                editable=False
+                            )
+                            builder2.configure_column(
+                                field='FFBPrice',
+                                header_name='FFB Unit Price',
+                                type=["numericColumn", "numberColumnFilter", "customNumericFormat"],
+                                precision=2
+                            )
+                            builder2.configure_column(
+                                field='Weight',
+                                header_name='Weight (kg)',
+                                type=["numericColumn", "numberColumnFilter", "customNumericFormat"],
+                                precision=2
+                            )
+                            builder2.configure_column(
+                                field='Amount',
+                                type=["numericColumn", "numberColumnFilter", "customNumericFormat"],
+                                precision=2
+                            )
+                            builder2.configure_column(
+                                field='OER',
+                                header_name='OER (%)',
+                                type=["numericColumn", "numberColumnFilter", "customNumericFormat"],
+                                precision=2
+                            )
+                            grid_options2 = builder2.build()
 
-                        # Display AgGrid
-                        ag2 = AgGrid(st.session_state['yieldassess_SupplierList'],
-                                    gridOptions=grid_options2,
-                                    editable=False,
-                                    allow_unsafe_jscode=True,
-                                    theme='balham',
-                                    height=330,
-                                    fit_columns_on_grid_load=True,
-                                    reload_data=False,
-                                    columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS, # NO_AUTOSIZE (Default), FIT_ALL_COLUMNS_TO_VIEW, FIT_CONTENTS
-                                    custom_css={
-                                        '#gridToolBar': {
-                                            'padding-bottom': '0px !important'
-                                        }
-                                    })
+                            # Display AgGrid
+                            ag2 = AgGrid(st.session_state['yieldassess_SupplierList'],
+                                        gridOptions=grid_options2,
+                                        editable=False,
+                                        allow_unsafe_jscode=True,
+                                        theme='balham',
+                                        height=330,
+                                        fit_columns_on_grid_load=True,
+                                        reload_data=False,
+                                        columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS, # NO_AUTOSIZE (Default), FIT_ALL_COLUMNS_TO_VIEW, FIT_CONTENTS
+                                        custom_css={
+                                            '#gridToolBar': {
+                                                'padding-bottom': '0px !important'
+                                            }
+                                        })
                     else:
                         st.session_state['yieldassess_SupplierList'] = []
                         
@@ -1745,7 +1758,7 @@ def show_MainPage():
             
             with st.container():
                 with col22_1:
-                    if len(st.session_state['yieldassess_RecordList']) != 0 and len(ag['selected_rows']) == 1:
+                    if len(st.session_state['yieldassess_RecordList']) != 0 and len(ag['selected_rows']) == 1 and len(st.session_state['yieldassess_SupplierList']) != 0:
                         st.download_button(
                             "Download as excel",
                             data=to_excel(pd.DataFrame(st.session_state['yieldassess_SupplierList']).set_index('Crop Supplier')),
