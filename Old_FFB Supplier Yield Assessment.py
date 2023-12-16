@@ -59,10 +59,10 @@ if 'yieldassess_RecordList' not in st.session_state:
 
 # Mill and Date
 if 'yieldassess_Mill' not in st.session_state:
-    st.session_state['yieldassess_Mill'] = st.session_state['yieldassess_OUKey']  #'LIBO SAWIT PERKASA PALM OIL MILL'
+    st.session_state['yieldassess_Mill'] = 'LIBO SAWIT PERKASA PALM OIL MILL'
     
-# if 'yieldassess_Mill_disabled' not in st.session_state:
-#     st.session_state['yieldassess_Mill_disabled'] = True
+if 'yieldassess_Mill_disabled' not in st.session_state:
+    st.session_state['yieldassess_Mill_disabled'] = True
     
 if 'yieldassess_Date' not in st.session_state:
     st.session_state['yieldassess_Date'] = datetime.strptime((datetime.today() - timedelta(days=1)).replace(microsecond=0).isoformat(), "%Y-%m-%dT%H:%M:%S")
@@ -573,7 +573,7 @@ def New():
     st.session_state['yieldassess_Status'] = 'New'
     st.session_state['yieldassess_Message'] = 'Adding New Record'
     
-    # st.session_state['yieldassess_Mill_disabled'] = True
+    st.session_state['yieldassess_Mill_disabled'] = False
     st.session_state['yieldassess_Date_disabled'] = False
     
     EmptyRecords()
@@ -627,9 +627,6 @@ def ControlNotAllowEdit():
 
 
 def EmptyRecords():
-    
-    st.session_state['yieldassess_Date'] = datetime.strptime((datetime.today() - timedelta(days=1)).replace(microsecond=0).isoformat(), "%Y-%m-%dT%H:%M:%S")
-    
     # CPO Price
     st.session_state['yieldassess_CPOTdPrice'] = 0.00
     st.session_state['yieldassess_CPOProCharges'] = 0.00
@@ -710,7 +707,7 @@ def Edit():
     st.session_state['yieldassess_btnCancel_disabled'] = False
     st.session_state['yieldassess_btnSubmit_disabled'] = False
     
-    # st.session_state['yieldassess_Mill_disabled'] = True
+    st.session_state['yieldassess_Mill_disabled'] = False
     st.session_state['yieldassess_Date_disabled'] = False
     
     ControlAllowEdit()
@@ -767,7 +764,7 @@ def Cancel():
     st.session_state['yieldassess_btnCancel_disabled'] = True
     st.session_state['yieldassess_btnSubmit_disabled'] = True
     
-    # st.session_state['yieldassess_Mill_disabled'] = True
+    st.session_state['yieldassess_Mill_disabled'] = True
     st.session_state['yieldassess_Date_disabled'] = True
     
     ControlNotAllowEdit()
@@ -927,7 +924,6 @@ def show_MainPage():
                                         'padding-bottom': '0px !important'
                                     }
                                 })
-                    
                 else:
                     testFrame=pd.DataFrame({"col1":[np.nan],"col2":[np.nan]})
                     ag = AgGrid(testFrame,
@@ -1083,13 +1079,13 @@ def show_MainPage():
             ######################################################
             with st.container():
                 with col3_1:
-                    # if st.session_state['yieldassess_Status'] == '' and len(ag['selected_rows']) == 1:
-                    st.session_state['yieldassess_Mill'] = ou
+                    if st.session_state['yieldassess_Status'] == '' and len(ag['selected_rows']) == 1:
+                        st.session_state['yieldassess_Mill'] = ou
                     
                     st.selectbox('Mill', options=('LIBO SAWIT PERKASA PALM OIL MILL',
                                                 'SEMUNAI SAWIT PERKASA PALM OIL MILL 1',
                                                 'SEMUNAI SAWIT PERKASA PALM OIL MILL 2'),  
-                                key='yieldassess_Mill', disabled=True)
+                                key='yieldassess_Mill', disabled=st.session_state['yieldassess_Mill_disabled'])
 
                     get_OUKey(st.session_state['yieldassess_Mill'])
                     
