@@ -1082,7 +1082,7 @@ def show_MainPage():
         # Scroll links, Export to Excel
         with st.container():
             with col2_1:
-                st.markdown('[Scroll to Pricing](#pricing) | [Scroll to Expenses](#expenses)')
+                st.markdown('[Scroll to Pricing](#pricing) | [Scroll to Calculation](#calculation)')
             with col2_2:
                 if len(st.session_state['ffbrefprice_RecordList']) != 0:
                     st.download_button(
