@@ -494,8 +494,8 @@ def Submit(Date, ouKey, CPOTdPrice, CPOProCharges, CPOTransCharges,
            PKTdPrice, PKProCharges, PKTransCharges, RendPK,
            ShellTdPrice, ShellProCharges, ShellTransCharges, RendShell,
            CPOProdCost, PKProdCost, KandirCost, CPOTransCost, PKTransCost, ShrinkageCost):
-    st.session_state['YieldAssess_Status'] = 'Submit'
-    st.session_state['YieldAssess_Message'] = 'Submitting...'
+    st.session_state['yieldassess_Status'] = 'Submit'
+    st.session_state['yieldassess_Message'] = 'Submitting...'
     
     st.session_state['yieldassess_btnNew_disabled'] = True
     st.session_state['yieldassess_btnEdit_disabled'] = True
@@ -700,6 +700,76 @@ def EmptyRecords():
     
     # Total Revenue
     st.session_state['yieldassess_TotalRevenue'] = 0.00
+    
+    # Total FFB Receipt (kg)
+    st.session_state['yieldassess_TotalWeight_Exp'] = 0.00
+    
+    # Average FFB Unit Price
+    st.session_state['yieldassess_AvgUnitPrice_Exp'] = 0.00
+    
+    # Total FFB Procurement Amount
+    st.session_state['yieldassess_TotalAmount_Exp'] = 0.00
+    
+    # Total CPO Produced (kg)
+    st.session_state['yieldassess_TotalCPOProduced'] = 0.00
+    
+    # CPO Production Cost
+    st.session_state['yieldassess_CPOProdCost'] = 0.00
+    
+    # Total CPO Production Cost
+    st.session_state['yieldassess_TotalCPOProdCost'] = 0.00
+    
+    # Total PK Produced (kg)
+    st.session_state['yieldassess_TotalPKProduced'] = 0.00
+    
+    # PK Production Cost
+    st.session_state['yieldassess_PKProdCost'] = 0.00
+    
+    # Total PK Production Cost
+    st.session_state['yieldassess_TotalPKProdCost'] = 0.00
+    
+    # Total FFB Receipt (kg)
+    st.session_state['yieldassess_TotalWeight_KandirExp'] = 0.00
+    
+    # Kandir Cost
+    st.session_state['yieldassess_KandirCost'] = 0.00
+    
+    # Total Kandir Cost
+    st.session_state['yieldassess_TotalKandirCost'] = 0.00
+    
+    # Total CPO Produced (kg)
+    st.session_state['yieldassess_TotalCPOProduced_TransCost'] = 0.00
+    
+    # CPO Transport Cost
+    st.session_state['yieldassess_CPOTransCost'] = 0.00
+    
+    # Total CPO Transport Cost
+    st.session_state['yieldassess_TotalCPOTransCost'] = 0.00
+    
+    # Total PK Produced (kg)
+    st.session_state['yieldassess_TotalPKProduced_TransCost'] = 0.00
+    
+    # PK Transport Cost
+    st.session_state['yieldassess_PKTransCost'] = 0.00
+    
+    # Total PK Transport Cost
+    st.session_state['yieldassess_TotalPKTransCost'] = 0.00
+    
+    # Total FFB Receipt (kg)
+    st.session_state['yieldassess_TotalWeight_ShrinkageExp'] = 0.00
+    
+    # Skrinkage Cost
+    st.session_state['yieldassess_ShrinkageCost'] = 0.00
+    
+    # Total Shrinkage Cost
+    st.session_state['yieldassess_TotalShrinkageCost'] = 0.00
+    
+    # Total Expenses
+    st.session_state['yieldassess_TotalExpenses'] = 0.00
+    
+    # Profit & Loss
+    st.session_state['yieldassess_ProfitAndLoss'] = 0.00
+        
     
  
 def Edit():
@@ -1623,7 +1693,7 @@ def show_MainPage():
                 # Total Shrinkage Cost
                 with col19_6: 
                     st.session_state['yieldassess_TotalShrinkageCost'] = format(float(st.session_state['yieldassess_TotalWeight_ShrinkageExp']) * float(st.session_state['yieldassess_ShrinkageCost']), '.2f')
-                    st.text_input('Total Shrinakge Cost', key='yieldassess_TotalShrinkageCost', disabled=True)      
+                    st.text_input('Total Shrinkage Cost', key='yieldassess_TotalShrinkageCost', disabled=True)      
             
             # Total Expenses
             with st.container():
