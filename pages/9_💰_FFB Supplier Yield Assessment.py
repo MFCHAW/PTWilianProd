@@ -207,7 +207,10 @@ if 'yieldassess_TotalPKSellPrice' not in st.session_state:
 # Actual SER
 if 'yieldassess_ProdSER' not in st.session_state:
     st.session_state['yieldassess_ProdSER'] = 0.00
-
+    
+if 'yieldassess_ProdSER_disabled' not in st.session_state:
+    st.session_state['yieldassess_ProdSER_disabled'] = True  
+    
 # Total FFB Weight for (Shell Revenue)
 if 'yieldassess_TotalWeight_ShellRev' not in st.session_state:
     st.session_state['yieldassess_TotalWeight_ShellRev'] = 0.00
@@ -595,6 +598,8 @@ def ControlAllowEdit():
     st.session_state['yieldassess_ShellTransCharges_disabled'] = False
     st.session_state['yieldassess_RendShell_disabled'] = False 
     
+    st.session_state['yieldassess_ProdSER_disabled'] = False
+    
     st.session_state['yieldassess_CPOProdCost_disabled'] = False
     st.session_state['yieldassess_PKProdCost_disabled'] = False
     st.session_state['yieldassess_KandirCost_disabled'] = False
@@ -616,7 +621,9 @@ def ControlNotAllowEdit():
     st.session_state['yieldassess_ShellTdPrice_disabled'] = True
     st.session_state['yieldassess_ShellProCharges_disabled'] = True
     st.session_state['yieldassess_ShellTransCharges_disabled'] = True
-    st.session_state['yieldassess_RendShell_disabled'] = True 
+    st.session_state['yieldassess_RendShell_disabled'] = True
+    
+    st.session_state['yieldassess_ProdSER_disabled'] = True
     
     st.session_state['yieldassess_CPOProdCost_disabled'] = True
     st.session_state['yieldassess_PKProdCost_disabled'] = True
@@ -1442,7 +1449,7 @@ def show_MainPage():
                 with col11_1:
                     if st.session_state['yieldassess_Status'] == '' and len(ag['selected_rows']) == 1:
                         st.session_state['yieldassess_ProdSER'] = float(ag['selected_rows'][0]['Actual SER'])
-                    st.number_input('Actual SER (%)', key='yieldassess_ProdSER', disabled=True)
+                    st.number_input('Actual SER (%)', key='yieldassess_ProdSER', disabled=st.session_state['yieldassess_ProdSER_disabled'])
                 with col11_2:
                     st.markdown('###')
                     st.markdown('### x')
