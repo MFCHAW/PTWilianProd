@@ -455,6 +455,7 @@ def get_OUKey(ou):
 async def SubmitPricing(Date, ouKey, CPOTdPrice, CPOProCharges, CPOTransCharges, 
                         PKTdPrice, PKProCharges, PKTransCharges, RendPK,
                         ShellTdPrice, ShellProCharges, ShellTransCharges, RendShell,
+                        ProdSER,
                         CPOProdCost, PKProdCost, KandirCost, CPOTransCost, PKTransCost, ShrinkageCost):
     session_timeout = aiohttp.ClientTimeout(total=60 * 60 * 24)
     async with aiohttp.ClientSession(timeout=session_timeout) as session:
@@ -473,6 +474,7 @@ async def SubmitPricing(Date, ouKey, CPOTdPrice, CPOProCharges, CPOTransCharges,
             "ShellProCharges": ShellProCharges,
             "ShellTransCharges": ShellTransCharges,
             "RendShell": RendShell,
+            "ProdSER": ProdSER,
             "CPOProdCost": CPOProdCost,
             "PKProdCost": PKProdCost,
             "KandirCost": KandirCost,
@@ -496,6 +498,7 @@ async def SubmitPricing(Date, ouKey, CPOTdPrice, CPOProCharges, CPOTransCharges,
 def Submit(Date, ouKey, CPOTdPrice, CPOProCharges, CPOTransCharges, 
            PKTdPrice, PKProCharges, PKTransCharges, RendPK,
            ShellTdPrice, ShellProCharges, ShellTransCharges, RendShell,
+           ProdSER,
            CPOProdCost, PKProdCost, KandirCost, CPOTransCost, PKTransCost, ShrinkageCost):
     st.session_state['yieldassess_Status'] = 'Submit'
     st.session_state['yieldassess_Message'] = 'Submitting...'
@@ -514,6 +517,7 @@ def Submit(Date, ouKey, CPOTdPrice, CPOProCharges, CPOTransCharges,
     loop.run_until_complete(SubmitPricing(Date, ouKey, CPOTdPrice, CPOProCharges, CPOTransCharges, 
                                           PKTdPrice, PKProCharges, PKTransCharges, RendPK,
                                           ShellTdPrice, ShellProCharges, ShellTransCharges, RendShell,
+                                          ProdSER,
                                           CPOProdCost, PKProdCost, KandirCost, CPOTransCost, PKTransCost, ShrinkageCost)) 
     
     Call_DisplayGridRecords(st.session_state['yieldassess_OUKey'], st.session_state['yieldassess_FromDate'], st.session_state['yieldassess_ToDate'])   
@@ -1216,6 +1220,7 @@ def show_MainPage():
                                 st.session_state['yieldassess_PKTransCharges'], st.session_state['yieldassess_RendPK'],
                                 st.session_state['yieldassess_ShellTdPrice'], st.session_state['yieldassess_ShellProCharges'], 
                                 st.session_state['yieldassess_ShellTransCharges'], st.session_state['yieldassess_RendShell'],
+                                st.session_state['yieldassess_ProdSER'],
                                 st.session_state['yieldassess_CPOProdCost'], st.session_state['yieldassess_PKProdCost'],
                                 st.session_state['yieldassess_KandirCost'], st.session_state['yieldassess_CPOTransCost'],
                                 st.session_state['yieldassess_PKTransCost'], st.session_state['yieldassess_ShrinkageCost']),
