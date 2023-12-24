@@ -1415,7 +1415,7 @@ def show_MainPage():
                     st.markdown('###')
                     st.markdown('### =')
                 with col9_9:   
-                    st.session_state['yieldassess_TotalCPOSellPrice'] = format(float(st.session_state['yieldassess_ProdOER'] * st.session_state['yieldassess_TotalWeight_CPORev'] * st.session_state['yieldassess_CPOTdPrice_CPORev']), '.2f')
+                    st.session_state['yieldassess_TotalCPOSellPrice'] = format(float((st.session_state['yieldassess_ProdOER'] / 100) * st.session_state['yieldassess_TotalWeight_CPORev'] * st.session_state['yieldassess_CPOTdPrice_CPORev']), '.2f')
                     st.text_input('CPO Revenue', key='yieldassess_TotalCPOSellPrice', disabled=True)
                 
             # PK Revenue
@@ -1446,7 +1446,7 @@ def show_MainPage():
                     st.markdown('###')
                     st.markdown('### =')
                 with col10_9:   
-                    st.session_state['yieldassess_TotalPKSellPrice'] = format(float(st.session_state['yieldassess_ProdKER'] * st.session_state['yieldassess_TotalWeight_PKRev'] * st.session_state['yieldassess_PKTdPrice_PKRev']), '.2f')
+                    st.session_state['yieldassess_TotalPKSellPrice'] = format(float((st.session_state['yieldassess_ProdKER'] / 100) * st.session_state['yieldassess_TotalWeight_PKRev'] * st.session_state['yieldassess_PKTdPrice_PKRev']), '.2f')
                     st.text_input('PK Revenue', key='yieldassess_TotalPKSellPrice', disabled=True) 
                     
             # Shell Revenue
@@ -1477,7 +1477,7 @@ def show_MainPage():
                     st.markdown('###')
                     st.markdown('### =')
                 with col11_9:   
-                    st.session_state['yieldassess_TotalShSellPrice'] = format(float(st.session_state['yieldassess_ProdSER'] * st.session_state['yieldassess_TotalWeight_ShellRev'] * st.session_state['yieldassess_ShellTdPrice_ShellRev']), '.2f')
+                    st.session_state['yieldassess_TotalShSellPrice'] = format(float((st.session_state['yieldassess_ProdSER'] / 100) * st.session_state['yieldassess_TotalWeight_ShellRev'] * st.session_state['yieldassess_ShellTdPrice_ShellRev']), '.2f')
                     st.text_input('Shell Revenue', key='yieldassess_TotalShSellPrice', disabled=True) 
             
             # Total Revenue
@@ -1532,7 +1532,7 @@ def show_MainPage():
                     
                 # Total CPO Produced (kg)
                 with col14_2:
-                    st.session_state['yieldassess_TotalCPOProduced'] = float(st.session_state['yieldassess_ProdOER'] * st.session_state['yieldassess_TotalWeight_CPORev'])
+                    st.session_state['yieldassess_TotalCPOProduced'] = float((st.session_state['yieldassess_ProdOER'] / 100) * st.session_state['yieldassess_TotalWeight_CPORev'])
                     st.number_input('Total CPO Produced (kg)', key='yieldassess_TotalCPOProduced', disabled=True)
 
                 with col14_3:
@@ -1562,7 +1562,7 @@ def show_MainPage():
             
                 # Total PK Produced (kg)
                 with col15_2:
-                    st.session_state['yieldassess_TotalPKProduced'] = float(st.session_state['yieldassess_ProdKER'] * st.session_state['yieldassess_TotalWeight_PKRev'])
+                    st.session_state['yieldassess_TotalPKProduced'] = float((st.session_state['yieldassess_ProdKER'] / 100) * st.session_state['yieldassess_TotalWeight_PKRev'])
                     st.number_input('Total PK Produced (kg)', key='yieldassess_TotalPKProduced', disabled=True)
 
                 with col15_3:
@@ -1623,7 +1623,7 @@ def show_MainPage():
                     
                 # Total CPO Produced (kg)
                 with col17_2:
-                    st.session_state['yieldassess_TotalCPOProduced_TransCost'] = float(st.session_state['yieldassess_ProdOER'] * st.session_state['yieldassess_TotalWeight_CPORev'])
+                    st.session_state['yieldassess_TotalCPOProduced_TransCost'] = float((st.session_state['yieldassess_ProdOER'] / 100) * st.session_state['yieldassess_TotalWeight_CPORev'])
                     st.number_input('Total CPO Produced (kg)', key='yieldassess_TotalCPOProduced_TransCost', disabled=True)
 
                 with col17_3:
@@ -1653,7 +1653,7 @@ def show_MainPage():
                     
                 # Total PK Produced (kg)
                 with col18_2:
-                    st.session_state['yieldassess_TotalPKProduced_TransCost'] = float(st.session_state['yieldassess_ProdKER'] * st.session_state['yieldassess_TotalWeight_PKRev'])
+                    st.session_state['yieldassess_TotalPKProduced_TransCost'] = float((st.session_state['yieldassess_ProdKER'] / 100) * st.session_state['yieldassess_TotalWeight_PKRev'])
                     st.number_input('Total PK Produced (kg)', key='yieldassess_TotalPKProduced_TransCost', disabled=True)
 
                 with col18_3:
