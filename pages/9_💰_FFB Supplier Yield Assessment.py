@@ -537,7 +537,7 @@ async def DisplayGridRecords(OUKey, FromDate, ToDate):
             
             if len(data['ResultSets']) != 0:
                 df = pd.DataFrame(data['ResultSets']['Table1'])
-                st.session_state['yieldassess_RecordList'] = df
+                st.session_state['yieldassess_RecordList'] = df.sort_values('Date')
             else:
                 st.session_state['yieldassess_RecordList'] = []
 
@@ -553,7 +553,7 @@ async def DisplaySupplierGridRecords(OUKey, Date):
             
             if len(data['ResultSets']) != 0:
                 df = pd.DataFrame(data['ResultSets']['Table1'])
-                st.session_state['yieldassess_SupplierList'] = df
+                st.session_state['yieldassess_SupplierList'] = df.sort_values('Crop Supplier')
             else:
                 st.session_state['yieldassess_SupplierList'] = []
 
