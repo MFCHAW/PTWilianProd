@@ -1261,7 +1261,7 @@ def show_MainPage():
                     st.markdown('###')
                     st.markdown('### =')
                 with col4_9:
-                    st.session_state['yieldassess_CPOPrice'] = format(float(st.session_state['yieldassess_CPOTdPrice'] - st.session_state['yieldassess_CPOProCharges'] - st.session_state['yieldassess_CPOTransCharges']), '.2f')
+                    st.session_state['yieldassess_CPOPrice'] = format(float(st.session_state['yieldassess_CPOTdPrice'] - st.session_state['yieldassess_CPOProCharges'] - st.session_state['yieldassess_CPOTransCharges']), '.0f')
                     st.text_input('CPO Price', key='yieldassess_CPOPrice', disabled=True)
         
             # PK Pricing
@@ -1295,7 +1295,7 @@ def show_MainPage():
                     st.markdown('###')
                     st.markdown('### =')
                 with col5_9:
-                    st.session_state['yieldassess_PKPrice'] = format(float((st.session_state['yieldassess_PKTdPrice'] - st.session_state['yieldassess_PKProCharges'] - st.session_state['yieldassess_PKTransCharges']) * st.session_state['yieldassess_RendPK'] / 100), '.2f')
+                    st.session_state['yieldassess_PKPrice'] = format(float((st.session_state['yieldassess_PKTdPrice'] - st.session_state['yieldassess_PKProCharges'] - st.session_state['yieldassess_PKTransCharges']) * st.session_state['yieldassess_RendPK'] / 100), '.0f')
                     st.text_input('PK Price', key='yieldassess_PKPrice', disabled=True)
 
             # Shell Pricing
@@ -1329,7 +1329,7 @@ def show_MainPage():
                     st.markdown('###')
                     st.markdown('### =')
                 with col6_9:
-                    st.session_state['yieldassess_ShellPrice'] = format(float((st.session_state['yieldassess_ShellTdPrice'] - st.session_state['yieldassess_ShellProCharges'] - st.session_state['yieldassess_ShellTransCharges']) * st.session_state['yieldassess_RendShell'] / 100), '.2f')
+                    st.session_state['yieldassess_ShellPrice'] = format(float((st.session_state['yieldassess_ShellTdPrice'] - st.session_state['yieldassess_ShellProCharges'] - st.session_state['yieldassess_ShellTransCharges']) * st.session_state['yieldassess_RendShell'] / 100), '.0f')
                     st.text_input('Shell Price', key='yieldassess_ShellPrice', disabled=True)
                         
             # Margin 
