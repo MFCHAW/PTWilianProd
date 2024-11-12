@@ -98,7 +98,34 @@ a[href="https://streamlit.io/cloud"] {display: none;}
 ._profileContainer_51w34_53 {display: none;}
 </style>
 """
-# st.markdown(hide_menu, unsafe_allow_html=True)
+st.markdown(hide_menu, unsafe_allow_html=True)
+
+
+
+
+# JavaScript to apply CSS styles after the page has loaded
+add_css_after_load = """
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Hide the Streamlit cloud link
+    const streamlitLink = document.querySelector('a[href="https://streamlit.io/cloud"]');
+    if (streamlitLink) {
+        streamlitLink.style.display = 'none';
+    }
+
+    // Hide the profile container
+    const profileContainer = document.querySelector('._profileContainer_51w34_53');
+    if (profileContainer) {
+        profileContainer.style.display = 'none';
+    }
+});
+</script>
+"""
+
+# Inject the JavaScript into the Streamlit app
+st.components.v1.html(add_css_after_load, height=0)
+
+
 
 
 # -- Declare containers --
@@ -153,8 +180,7 @@ def LoggedIn_Clicked(userName, password):
 
 with headerSection:
     st.title('FFB Procurement Application')
-    st.markdown(hide_menu, unsafe_allow_html=True)
-
+    
     # First run will have nothing in session_state
     if 'loggedIn' not in st.session_state:
         st.session_state['loggedIn'] = False
