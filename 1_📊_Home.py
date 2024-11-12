@@ -98,7 +98,7 @@ a[href="https://streamlit.io/cloud"] {display: none;}
 ._profileContainer_51w34_53 {display: none;}
 </style>
 """
-st.markdown(hide_menu, unsafe_allow_html=True)
+# st.markdown(hide_menu, unsafe_allow_html=True)
 
 
 # -- Declare containers --
@@ -153,6 +153,7 @@ def LoggedIn_Clicked(userName, password):
 
 with headerSection:
     st.title('FFB Procurement Application')
+    st.markdown(hide_menu, unsafe_allow_html=True)
 
     # First run will have nothing in session_state
     if 'loggedIn' not in st.session_state:
