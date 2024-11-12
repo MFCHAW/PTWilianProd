@@ -94,6 +94,9 @@ hide_menu = """
 <style>
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
+[data-testid="stToolbar"] {display: none;}
+a[href="https://streamlit.io/cloud"] {display: none;}
+._profileContainer_51w34_53 {display: none;}
 </style>
 """
 st.markdown(hide_menu, unsafe_allow_html=True)
