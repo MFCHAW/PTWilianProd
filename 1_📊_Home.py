@@ -93,6 +93,7 @@ hide_menu = """
 <style>
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
+[data-testid="stToolbar"] {display: none;}
 </style>
 """
 st.markdown(hide_menu, unsafe_allow_html=True)
