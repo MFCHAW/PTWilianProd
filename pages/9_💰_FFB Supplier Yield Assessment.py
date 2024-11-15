@@ -1849,7 +1849,7 @@ def show_MainPage():
                         
                         # FFB Unit Price (Exclude PPN)
                         if len(ag['selected_rows']) == 1:
-                            st.session_state['yieldassess_OERAverageUnitPrice_Detail'] = (float(st.session_state['Average FFB Unit Price']) / float(st.session_state['yieldassess_CPOPrice'])) * 100
+                            st.session_state['yieldassess_OERAverageUnitPrice_Detail'] = (float(st.session_state['yieldassess_AvgUnitPrice']) / float(st.session_state['yieldassess_CPOPrice'])) * 100
                         st.number_input('OER (Average Unit Price) (%)', key='yieldassess_OERAverageUnitPrice_Detail', disabled=True, format='%0.2f')  
             
             with st.container():
