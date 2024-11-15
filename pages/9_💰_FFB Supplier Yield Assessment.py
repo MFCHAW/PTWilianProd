@@ -356,8 +356,8 @@ if 'yieldassess_OERBuying_Detail' not in st.session_state:
     st.session_state['yieldassess_OERBuying_Detail'] = 0.00
     
 # FFB Unit Price (Exclude PPN) (Second Tab)
-if 'yieldassess_FFBNoPPN_Detail' not in st.session_state:
-    st.session_state['yieldassess_FFBNoPPN_Detail'] = 0.00
+if 'yieldassess_OERAverageUnitPrice_Detail' not in st.session_state:
+    st.session_state['yieldassess_OERAverageUnitPrice_Detail'] = 0.00
 
 
 
@@ -1845,12 +1845,12 @@ def show_MainPage():
                         # OER (%)
                         if len(ag['selected_rows']) == 1:
                             st.session_state['yieldassess_OERBuying_Detail'] = float(ag['selected_rows'][0]['FFB Procurement OER'])
-                        st.number_input('OER (%)', key='yieldassess_OERBuying_Detail', disabled=True, format='%0.2f')
+                        st.number_input('OER (Average) (%)', key='yieldassess_OERBuying_Detail', disabled=True, format='%0.2f')
                         
                         # FFB Unit Price (Exclude PPN)
                         if len(ag['selected_rows']) == 1:
-                            st.session_state['yieldassess_FFBNoPPN_Detail'] = float(st.session_state['yieldassess_CPOPrice']) + float(st.session_state['yieldassess_PKPrice']) + float(st.session_state['yieldassess_ShellPrice'])
-                        st.number_input('FFB Unit Price (Exclude PPN)', key='yieldassess_FFBNoPPN_Detail', disabled=True, format='%0.2f')  
+                            st.session_state['yieldassess_OERAverageUnitPrice_Detail'] = (float(st.session_state['Average FFB Unit Price']) / float(st.session_state['yieldassess_CPOPrice'])) * 100
+                        st.number_input('OER (Average Unit Price) (%)', key='yieldassess_OERAverageUnitPrice_Detail', disabled=True, format='%0.2f')  
             
             with st.container():
                 with col22_1:
